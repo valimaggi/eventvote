@@ -1,0 +1,43 @@
+{
+  "name": "eventvote",
+  "version": "0.0.1",
+  "description": "Scheduler for events with voting",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha",
+    "watch": "mocha --watch"
+  },
+  "keywords": [
+    "events",
+    "scheduling",
+    "rest",
+    "api"
+  ],
+  "author": "Mikko Välimäki",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "dotenv": "^4.0.0",
+    "express": "4.14.0",
+    "helmet": "^3.5.0",
+    "lodash": "^4.17.2",
+    "moment": "2.15.1",
+    "mongoose": "4.6.3",
+    "morgan": "1.7.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "chai": "3.5.0",
+    "chai-http": "3.0.0",
+    "eslint": "3.7.1",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-import": "1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "mocha": "3.1.0",
+    "proxyquire": "1.7.10",
+    "sinon": "1.17.6",
+    "sinon-as-promised": "4.0.2",
+    "supertest": "2.0.0"
+  }
+}
