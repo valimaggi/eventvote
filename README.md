@@ -18,13 +18,19 @@ App for event scheduling with voting. So far there is only the backend REST API.
 
 ## Usage
 
-### List all events
+### General
+
+Use the .env file to set the config props like server port and your MongoDB URI and credentials.
+
+### API
+
+#### List all events
 Endpoint: `/api/v1/event/list`
 
-#### Request
+##### Request
 Method: `GET`
 
-#### Response
+##### Response
 Body:
 
 ```
@@ -46,10 +52,10 @@ Body:
 }
 ```
 
-### Create an event
+#### Create an event
 Endpoint: `/api/v1/event`
 
-#### Request
+##### Request
 Method: `POST`
 
 Body:
@@ -65,7 +71,7 @@ Body:
 }
 ```
 
-#### Response
+##### Response
 Body:
 
 ```
@@ -74,15 +80,15 @@ Body:
 }
 ```
 
-### Show an event
+#### Show an event
 Endpoint: `/api/v1/event/{id}`
 
-#### Request
+##### Request
 Method: `GET`
 
 Parameters: `id`, `long`
 
-#### Response
+##### Response
 Body:
 
 ```
@@ -108,10 +114,10 @@ Body:
 }
 ```
 
-### Add votes to an event
+#### Add votes to an event
 Endpoint: `/api/v1/event/{id}/vote`
 
-#### Request
+##### Request
 Method: `POST`
 
 Parameters: `id`, `long`
@@ -128,7 +134,7 @@ Body:
 }
 ```
 
-#### Response
+##### Response
 
 ```
 {
@@ -160,16 +166,16 @@ Body:
 }
 ```
 
-### Show the results of an event
+#### Show the results of an event
 Endpoint: `/api/v1/event/{id}/results`
 Responds with dates that are **suitable for all participants**.
 
-#### Request
+##### Request
 Method: `GET`
 
 Parameters: `id`, `long`
 
-#### Response
+##### Response
 
 ```
 {
@@ -190,14 +196,14 @@ Parameters: `id`, `long`
 }
 ```
 
-### Delete all events
+#### Delete all events
 Endpoint: `/api/v1/event`
 No response, just deleting all the events.
 
-#### Request
+##### Request
 Method: `DELETE`
 
-#### Response
+##### Response
 
 ```
 No response
