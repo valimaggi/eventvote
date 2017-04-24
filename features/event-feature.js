@@ -22,7 +22,6 @@ function getAllEvents(req, res) {
       return res.status(200).json({ events: responseEvents });
     })
     .catch(err => dbErrorResponse(err, res));
-  return;
 }
 
 function getEvent(req, res) {
@@ -36,7 +35,6 @@ function getEvent(req, res) {
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
     })
     .catch(err => dbErrorResponse(err, res));
-  return;
 }
 
 function createEvent(req, res) {
@@ -53,7 +51,6 @@ function createEvent(req, res) {
     return;
   }
   res.status(400).json(messages.INVALID_REQUEST_BODY);
-  return;
 }
 
 function castVote(req, res) {
@@ -110,10 +107,8 @@ function castVote(req, res) {
           // In normal situation updated event is returned
           res.status(200).json(createDateMappedEvent(updatedEvent._id, updatedEvent.name, updatedEvent.dates, updatedEvent.votes));
       }
-      return;
     })
     .catch(err => dbErrorResponse(err, res));
-  return;
 }
 
 function getResults(req, res) {
@@ -156,7 +151,6 @@ function deleteAllEvents(req, res) {
       res.sendStatus(204);
     })
     .catch(err => dbErrorResponse(err, res));
-  return;
 }
 
 module.exports = { getAllEvents, getEvent, createEvent, castVote, getResults, deleteAllEvents };
