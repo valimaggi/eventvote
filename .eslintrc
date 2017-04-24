@@ -15,5 +15,6 @@
     'object-shorthand': 'off',
     'linebreak-style': 'off',
     'max-len': ['error', 175],
+    'no-restricted-syntax': 'off'
     }
 }
