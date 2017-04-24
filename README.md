@@ -2,10 +2,10 @@
 
 App for event scheduling with voting. So far there is only the backend REST API.
 
-#### What's missing?
+#### What's next/missing?
+* SQL database support in addition to MongoDB
 * Data validation in the backend
 * Frontend
-* Support for SQL database in addition to MongoDB
 
 ## Install
 
