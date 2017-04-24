@@ -2,6 +2,10 @@
 
 App for event scheduling with voting. So far there is only the backend REST API.
 
+#### What's missing?
+* Data validation in the backend
+* Frontend
+
 ## Install
 
 `yarn install` or `npm install`
