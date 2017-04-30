@@ -19,7 +19,7 @@ App for event scheduling with voting. So far there is only the backend REST API.
 
 `npm test` to run all the tests
 
-`npm test watch` to run tests after every file change
+`npm test watch` to run tests constantly after every file change
 
 ## Usage
 
