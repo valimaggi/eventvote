@@ -1,42 +1,30 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const supertest = require('supertest');
 const expect = require('chai').expect;
+const initRequest = require('./util/test-helpers').initRequest;
 const messages = require('../common/messages');
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const express = require('express');
-const eventRoutes = require('../routes/event-routes');
+const createEventRouter = require('../routes/event-routes');
 
 describe('GET /event/:id/results', () => {
+  let createEventRouterRequest;
+  let stubForFindOne;
   let request;
-  let findOneStub;
 
-  beforeEach(() => {
-    const app = express();
-    const mainRouter = new express.Router();
-    app.use(mainRouter);
-
-    findOneStub = sinon.stub();
-
-    // Event feature module with stubbed event model dependency so we don't need DB to test.
-    // Proxyquire enables stubbing the modules of the required module, in this case
-    // the event model and its method findOne
-    const feature = proxyquire('../features/event-feature', {
+  before(() => {
+    createEventRouterRequest = initRequest(createEventRouter);
+    stubForFindOne = sinon.stub();
+    request = createEventRouterRequest('../../features/event-feature', {
       '../models/event': {
-        findOne: findOneStub
+        findOne: stubForFindOne
       }
     });
-    // Bind event routes to main router
-    eventRoutes(mainRouter, feature);
-    // Get a supertest instance so we can make requests
-    request = supertest(app);
   });
 
   it('should respond with a 200 and one date found from one voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    findOneStub.resolves(
+    stubForFindOne.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -58,7 +46,8 @@ describe('GET /event/:id/results', () => {
       }
     );
     return request
-      .get('/event/' + testId + '/results')
+      .get('/' + testId + '/results')
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal({
@@ -81,7 +70,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and one date found from two voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    findOneStub.resolves(
+    stubForFindOne.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -110,7 +99,8 @@ describe('GET /event/:id/results', () => {
       }
     );
     return request
-      .get('/event/' + testId + '/results')
+      .get('/' + testId + '/results')
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal({
@@ -133,7 +123,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and two dates found from three voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    findOneStub.resolves(
+    stubForFindOne.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -170,7 +160,8 @@ describe('GET /event/:id/results', () => {
       }
     );
     return request
-      .get('/event/' + testId + '/results')
+      .get('/' + testId + '/results')
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal({
@@ -201,7 +192,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and no suitable date found', () => {
     const testId = 2;
     // DB stub returns an event
-    findOneStub.resolves(
+    stubForFindOne.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -236,7 +227,8 @@ describe('GET /event/:id/results', () => {
       }
     );
     return request
-      .get('/event/' + testId + '/results')
+      .get('/' + testId + '/results')
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal(messages.NO_SUITABLE_DATE);
@@ -246,9 +238,10 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and not found', () => {
     const nonExistingId = 'jhy8b';
     // DB stub returns null
-    findOneStub.resolves(null);
+    stubForFindOne.resolves(null);
     return request
-      .get('/event/' + nonExistingId + '/results')
+      .get('/' + nonExistingId + '/results')
+      .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
         expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);

@@ -1,9 +1,7 @@
 const express = require('express');
 
-const eventRoute = (mainRouter, service) => {
+function createEventRouter(service) {
   const router = new express.Router();
-  // Mount the new router to the given main router with the route prefix
-  mainRouter.use('/event', router);
 
   // Route definitions
   router.get('/list', service.getAllEvents);
@@ -12,6 +10,7 @@ const eventRoute = (mainRouter, service) => {
   router.post('/:id/vote', service.castVote);
   router.get('/:id/results', service.getResults);
   router.delete('', service.deleteAllEvents);
-};
+  return router;
+}
 
-module.exports = eventRoute;
+module.exports = createEventRouter;

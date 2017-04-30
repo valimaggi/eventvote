@@ -1,49 +1,37 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const supertest = require('supertest');
 const expect = require('chai').expect;
+const initRequest = require('./util/test-helpers').initRequest;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const express = require('express');
-const eventRoutes = require('../routes/event-routes');
+const createEventRouter = require('../routes/event-routes');
 
 describe('GET /event/list', () => {
+  let createEventRouterRequest;
+  let stubForGetAll;
   let request;
-  let getAllStub;
 
-  beforeEach(() => {
-    const app = express();
-    const mainRouter = new express.Router();
-    app.use(mainRouter);
-
-    getAllStub = sinon.stub();
-
-    // Event feature module with stubbed event model dependency so we don't need DB to test.
-    // Proxyquire enables stubbing the modules of the required module, in this case
-    // the event model and its method getAll
-    const feature = proxyquire('../features/event-feature', {
+  before(() => {
+    createEventRouterRequest = initRequest(createEventRouter);
+    stubForGetAll = sinon.stub();
+    request = createEventRouterRequest('../../features/event-feature', {
       '../models/event': {
-        getAll: getAllStub,
-      },
+        getAll: stubForGetAll,
+      }
     });
-    // Bind event routes to main router
-    eventRoutes(mainRouter, feature);
-    // Get a supertest instance so we can make requests
-    request = supertest(app);
   });
 
   it('should respond with a 404 when using wrong URL', () => {
     //  Wrong URL
     request
-      .get('/even')
+      .get('/lis')
       .expect(404);
   });
 
   it('should respond with a 200 and no events', () => {
     // DB stub returns no events
-    getAllStub.resolves([]);
+    stubForGetAll.resolves([]);
     return request
-      .get('/event/list')
+      .get('/list')
       .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
@@ -54,7 +42,7 @@ describe('GET /event/list', () => {
 
   it('should respond with a 200 and two events', () => {
     // DB stub returns events with id, name and dates
-    getAllStub.resolves([
+    stubForGetAll.resolves([
       {
         _id: '1',
         name: 'party',
@@ -71,7 +59,7 @@ describe('GET /event/list', () => {
       }
     ]);
     return request
-      .get('/event/list')
+      .get('/list')
       .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {

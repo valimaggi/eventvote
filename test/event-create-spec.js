@@ -1,39 +1,26 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const supertest = require('supertest');
-const expect = require('chai').expect;
 const bodyParser = require('body-parser');
+const expect = require('chai').expect;
+const initRequest = require('./util/test-helpers').initRequest;
 const messages = require('../common/messages');
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const express = require('express');
-const eventRoutes = require('../routes/event-routes');
+
+const createEventRouter = require('../routes/event-routes');
 
 describe('POST /event', () => {
+  let createEventRouterRequest;
+  let stubForCreate;
   let request;
-  let createEventStub;
 
-  beforeEach(() => {
-    const app = express();
-    app.use(bodyParser.json());
-
-    const mainRouter = new express.Router();
-    app.use(mainRouter);
-
-    createEventStub = sinon.stub();
-
-    // Event feature module with stubbed event model dependency so we don't need DB to test.
-    // Proxyquire enables stubbing the modules of the required module, in this case
-    // the event model and its method create
-    const feature = proxyquire('../features/event-feature', {
+  before(() => {
+    createEventRouterRequest = initRequest(createEventRouter, bodyParser.json());
+    stubForCreate = sinon.stub();
+    request = createEventRouterRequest('../../features/event-feature', {
       '../models/event': {
-        create: createEventStub
+        create: stubForCreate
       }
     });
-    // Bind event routes to main router
-    eventRoutes(mainRouter, feature);
-    // Get a supertest instance so we can make requests
-    request = supertest(app);
   });
 
   it('should respond with a 201 when posting a valid event', () => {
@@ -41,13 +28,13 @@ describe('POST /event', () => {
     const testName = 'test name';
     const testDates = ['2016-01-01', '2016-01-20'];
     // DB stub returns an event with an _id
-    createEventStub.resolves(
+    stubForCreate.resolves(
       {
         _id: newId
       }
     );
     return request
-      .post('/event')
+      .post('/')
       .send({ name: testName, dates: testDates })
       .expect(201);
   });
@@ -57,14 +44,15 @@ describe('POST /event', () => {
     const testName = 'test name';
     const testDates = ['2016-01-01', '2016-01-20'];
     // DB stub returns an event with an _id
-    createEventStub.resolves(
+    stubForCreate.resolves(
       {
         _id: newId
       }
     );
     return request
-      .post('/event')
+      .post('/')
       .send({ name: testName, dates: testDates })
+      .expect('Content-Type', /json/)
       .expect(201)
       .then((res) => {
         expect(res.body).to.deep.equal({ id: newId });
@@ -73,15 +61,16 @@ describe('POST /event', () => {
 
   it('should respond with a 400 when posting invalid event', () => {
     request
-      .post('/event')
+      .post('/')
       .send()
       .expect(400);
   });
 
   it('should respond with an error message when posting invalid event', () => {
     request
-      .post('/event')
+      .post('/')
       .send()
+      .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
         expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);

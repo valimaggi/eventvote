@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const API_PREFIX = require('./config/properties').API_PREFIX;
-const eventRoutes = require('./routes/event-routes');
+const createEventRouter = require('./routes/event-routes');
 const eventFeature = require('./features/event-feature');
 
 const app = express();
@@ -29,11 +29,11 @@ mongoose.Promise = Promise;
 mongoose.connect(process.env.DB_URI, { user: process.env.DB_USER, pass: process.env.DB_PASS })
 .then(() => {
   // Setting routes
-  const router = new express.Router();
-  eventRoutes(router, eventFeature);
+  const rootRouter = new express.Router();
+  rootRouter.use('/event', createEventRouter(eventFeature));
 
-  // API prefix for the main router
-  app.use(API_PREFIX, router);
+  // API prefix for the root router
+  app.use(API_PREFIX, rootRouter);
 
   // Start the server
   const port = process.env.SERVER_PORT;

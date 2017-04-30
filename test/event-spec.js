@@ -1,40 +1,29 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const supertest = require('supertest');
 const expect = require('chai').expect;
+const initRequest = require('./util/test-helpers').initRequest;
 const messages = require('../common/messages');
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const express = require('express');
-const eventRoutes = require('../routes/event-routes');
+const createEventRouter = require('../routes/event-routes');
 
 describe('GET /event/:id', () => {
+  let createEventRouterRequest;
+  let stubForGetOneById;
   let request;
-  let getOneByIdStub;
 
-  beforeEach(() => {
-    const app = express();
-    const mainRouter = new express.Router();
-    app.use(mainRouter);
-
-    getOneByIdStub = sinon.stub();
-
-    // Event feature module with stubbed event model dependency so we don't need DB to test.
-    // Proxyquire enables stubbing the modules of the required module, in this case
-    // the event model and its method getOneByIdStub
-    const feature = proxyquire('../features/event-feature', {
+  before(() => {
+    createEventRouterRequest = initRequest(createEventRouter);
+    stubForGetOneById = sinon.stub();
+    request = createEventRouterRequest('../../features/event-feature', {
       '../models/event': {
-        getOneById: getOneByIdStub
+        getOneById: stubForGetOneById
       }
     });
-    // Bind event routes to main router
-    eventRoutes(mainRouter, feature);
-    // Get a supertest instance so we can make requests
-    request = supertest(app);
   });
+
   it('should respond with a 200 when using valid id', () => {
     const testId = 3;
-    getOneByIdStub.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Mikko\'s awesome party',
@@ -43,14 +32,14 @@ describe('GET /event/:id', () => {
       }
     );
     return request
-      .get('/event/' + testId)
+      .get('/' + testId)
       .expect(200);
   });
 
   it('should respond with one event when using valid id', () => {
     const testId = 2;
     // DB stub returns an event
-    getOneByIdStub.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Mikko\'s awesome party',
@@ -72,7 +61,8 @@ describe('GET /event/:id', () => {
       }
     );
     return request
-      .get('/event/' + testId)
+      .get('/' + testId)
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal(
@@ -102,18 +92,19 @@ describe('GET /event/:id', () => {
   it('should respond with a 404 when using non-existing id', () => {
     const nonExistingId = '57fa90d046d78827c7c50f83';
     // DB stub returns null
-    getOneByIdStub.resolves(null);
+    stubForGetOneById.resolves(null);
     return request
-      .get('/event/' + nonExistingId)
+      .get('/' + nonExistingId)
       .expect(404);
   });
 
   it('should respond with a not found message when using non-existing id', () => {
     const nonExistingId = '57fa90d046d78827c7c50f83';
     // DB stub returns null
-    getOneByIdStub.resolves(null);
+    stubForGetOneById.resolves(null);
     return request
-      .get('/event/' + nonExistingId)
+      .get('/' + nonExistingId)
+      .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
         expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
@@ -130,9 +121,9 @@ describe('GET /event/:id', () => {
       path: '_id'
     };
     // DB stub returns null
-    getOneByIdStub.rejects(errorObject);
+    stubForGetOneById.rejects(errorObject);
     return request
-      .get('/event/' + invalidId)
+      .get('/' + invalidId)
       .expect(400);
   });
 
@@ -146,9 +137,10 @@ describe('GET /event/:id', () => {
       path: '_id'
     };
     // DB stub returns null
-    getOneByIdStub.rejects(errorObject);
+    stubForGetOneById.rejects(errorObject);
     return request
-      .get('/event/' + invalidId)
+      .get('/' + invalidId)
+      .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
         expect(res.body).to.deep.equal(messages.INVALID_REQUEST_URL);
@@ -160,9 +152,9 @@ describe('GET /event/:id', () => {
       name: 'not CastError'
     };
     // DB stub returns error
-    getOneByIdStub.rejects(errorObject);
+    stubForGetOneById.rejects(errorObject);
     return request
-      .get('/event/234gd')
+      .get('/234gd')
       .expect(500);
   });
 });

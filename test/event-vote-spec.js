@@ -1,41 +1,27 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const supertest = require('supertest');
-const expect = require('chai').expect;
 const bodyParser = require('body-parser');
+const expect = require('chai').expect;
+const initRequest = require('./util/test-helpers').initRequest;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const express = require('express');
-const eventRoutes = require('../routes/event-routes');
+const createEventRouter = require('../routes/event-routes');
 
 describe('POST /event/:id/vote', () => {
+  let createEventRouterRequest;
+  let stubForGetOneById;
+  let stubForUpdate;
   let request;
-  let getOneByIdStub;
-  let updateStub;
 
-  beforeEach(() => {
-    const app = express();
-    app.use(bodyParser.json());
-
-    const mainRouter = new express.Router();
-    app.use(mainRouter);
-
-    getOneByIdStub = sinon.stub();
-    updateStub = sinon.stub();
-
-    // Event feature module with stubbed event model dependency so we don't need DB to test.
-    // Proxyquire enables stubbing the modules of the required module, in this case
-    // the event model and its methods getOneById and update
-    const feature = proxyquire('../features/event-feature', {
+  before(() => {
+    createEventRouterRequest = initRequest(createEventRouter, [bodyParser.json()]);
+    stubForGetOneById = sinon.stub();
+    stubForUpdate = sinon.stub();
+    request = createEventRouterRequest('../../features/event-feature', {
       '../models/event': {
-        getOneById: getOneByIdStub,
-        update: updateStub
+        getOneById: stubForGetOneById,
+        update: stubForUpdate
       }
     });
-    // Bind event routes to main router
-    eventRoutes(mainRouter, feature);
-    // Get a supertest instance so we can make requests
-    request = supertest(app);
   });
 
   it('should respond with a 200 and vote status of the voted event', () => {
@@ -45,7 +31,7 @@ describe('POST /event/:id/vote', () => {
     const testVoteDate1 = '2014-01-01';
     const testVoteDate2 = '2014-01-12';
 
-    updateStub.resolves(
+    stubForUpdate.resolves(
       {
         _id: testEventId,
         name: testEventName,
@@ -74,7 +60,7 @@ describe('POST /event/:id/vote', () => {
         ]
       });
     // DB stub returns an event
-    getOneByIdStub.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testEventId,
         name: testEventName,
@@ -103,8 +89,9 @@ describe('POST /event/:id/vote', () => {
       }
     );
     return request
-      .post('/event/' + testEventId + '/vote')
+      .post('/' + testEventId + '/vote')
       .send({ name: testVoterName, votes: [testVoteDate2] })
+      .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal({
