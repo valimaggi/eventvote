@@ -16,8 +16,8 @@ app.use(helmet.frameguard({ action: 'sameorigin' }));
 app.use(helmet.ieNoOpen());
 app.use(helmet.noSniff());
 app.use(helmet.xssFilter());
-const sixtyDaysInSeconds = 5184000;
-app.use(helmet.hsts({ maxAge: sixtyDaysInSeconds }));
+const SIXTY_DAYS_IN_SECONDS = 5184000;
+app.use(helmet.hsts({ maxAge: SIXTY_DAYS_IN_SECONDS }));
 // Body-parser parses JSON requests
 app.use(bodyParser.json());
 // API logging
@@ -39,7 +39,7 @@ mongoose.connect(process.env.DB_URI, { user: process.env.DB_USER, pass: process.
   // Start the server
   const port = process.env.SERVER_PORT;
   app.listen(port);
-  console.log('Listening on port ' + port);
+  console.log(`Listening on port ${port}`);
 })
 .catch((error) => {
   console.log(`Connection error: ${error}`);
