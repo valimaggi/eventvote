@@ -28,7 +28,6 @@ app.use(morgan('dev'));
 mongoose.Promise = Promise;
 mongoose.connect(process.env.DB_URI, { user: process.env.DB_USER, pass: process.env.DB_PASS })
 .then(() => {
-  // db.on('error', console.error.bind(console, 'Connection error:'));
   // Setting routes
   const router = new express.Router();
   eventRoutes(router, eventFeature);
