@@ -20,4 +20,14 @@ const initRequest = (createRouter, ...middlewares) => {
   };
 };
 
-module.exports = { initRequest };
+const createEventWithVotesFactory = (eventName, eventDates) =>
+  (eventIdObject, votes) =>
+    Object.assign(eventIdObject,
+      {
+        name: eventName,
+        dates: eventDates,
+        votes: votes
+      }
+    );
+
+module.exports = { initRequest, createEventWithVotesFactory };

@@ -1,13 +1,12 @@
 const moment = require('moment');
-const isEmpty = require('lodash/isEmpty');
+const validateNewEvent = require('../validation/event-validation');
 const constants = require('../common/constants');
 const messages = require('../common/messages');
 const eventModel = require('../models/event');
 const dateMappedEvent = require('../util/helpers').dateMappedEvent;
-const dbErrorResponse = require('../util/helpers').dbErrorResponse;
-
-const NONEXISTENT_DATES_ERROR = 'NONEXISTENT_DATES_ERROR';
-const RESOURCE_NOT_FOUND_ERROR = 'RESOURCE_NOT_FOUND_ERROR';
+const sendServerErrorResponse = require('../util/helpers').sendServerErrorResponse;
+const NONEXISTENT_DATES_ERROR = require('../util/error-strings').NONEXISTENT_DATES_ERROR;
+const RESOURCE_NOT_FOUND_ERROR = require('../util/error-strings').RESOURCE_NOT_FOUND_ERROR;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
 const createDateMappedEvent = dateMappedEvent(mapDatesWithMoment, constants.DATE_FORMAT);
@@ -21,7 +20,7 @@ function getAllEvents(req, res) {
       ));
       return res.status(200).json({ events: responseEvents });
     })
-    .catch(err => dbErrorResponse(err, res));
+    .catch(err => sendServerErrorResponse(err, res));
 }
 
 function getEvent(req, res) {
@@ -34,23 +33,25 @@ function getEvent(req, res) {
         // Only relevant data to the response
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
     })
-    .catch(err => dbErrorResponse(err, res));
+    .catch(err => sendServerErrorResponse(err, res));
 }
 
 function createEvent(req, res) {
-  if (req.body !== undefined && !isEmpty(req.body)) {
-    const newEvent = {
-      name: req.body.name,
-      dates: req.body.dates.map(date => moment(date))
-    };
-    eventModel.create(newEvent)
-      .then((event) => {
-        res.status(201).json({ id: event._id });
-      })
-      .catch(err => dbErrorResponse(err, res));
-    return;
-  }
-  res.status(400).json(messages.INVALID_REQUEST_BODY);
+  try {
+    if (validateNewEvent(req)) {
+      const newEvent = {
+        name: req.body.name,
+        dates: req.body.dates.map(date => moment(date))
+      };
+      eventModel.create(newEvent)
+        .then((event) => {
+          res.status(201).json({ id: event._id });
+        })
+        .catch(err => sendServerErrorResponse(err, res));
+      return;
+    }
+    res.status(400).json(messages.INVALID_REQUEST_BODY);
+  } catch (err) { sendServerErrorResponse(err, res); }
 }
 
 function castVote(req, res) {
@@ -108,7 +109,7 @@ function castVote(req, res) {
           res.status(200).json(createDateMappedEvent(updatedEvent._id, updatedEvent.name, updatedEvent.dates, updatedEvent.votes));
       }
     })
-    .catch(err => dbErrorResponse(err, res));
+    .catch(err => sendServerErrorResponse(err, res));
 }
 
 function getResults(req, res) {
@@ -142,7 +143,7 @@ function getResults(req, res) {
       }
       return res.status(200).json(messages.NO_SUITABLE_DATE);
     })
-    .catch(err => dbErrorResponse(err, res));
+    .catch(err => sendServerErrorResponse(err, res));
 }
 
 function deleteAllEvents(req, res) {
@@ -150,7 +151,7 @@ function deleteAllEvents(req, res) {
     .then(() => {
       res.sendStatus(204);
     })
-    .catch(err => dbErrorResponse(err, res));
+    .catch(err => sendServerErrorResponse(err, res));
 }
 
 module.exports = { getAllEvents, getEvent, createEvent, castVote, getResults, deleteAllEvents };

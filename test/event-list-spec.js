@@ -20,14 +20,7 @@ describe('GET /event/list', () => {
     });
   });
 
-  it('should respond with a 404 when using wrong URL', () => {
-    //  Wrong URL
-    request
-      .get('/lis')
-      .expect(404);
-  });
-
-  it('should respond with a 200 and no events', () => {
+  it('should respond with a 200 and no events when there are no events', () => {
     // DB stub returns no events
     stubForGetAll.resolves([]);
     return request
@@ -40,7 +33,7 @@ describe('GET /event/list', () => {
       });
   });
 
-  it('should respond with a 200 and two events', () => {
+  it('should respond with a 200 and two events when there are two events', () => {
     // DB stub returns events with id, name and dates
     stubForGetAll.resolves([
       {
@@ -77,5 +70,16 @@ describe('GET /event/list', () => {
           ]
           });
       });
+  });
+
+  it('should respond with a 500 in other cases when errors occur in server', () => {
+    const errorObject = {
+      name: 'not CastError'
+    };
+    // DB stub returns error
+    stubForGetAll.rejects(errorObject);
+    return request
+    .get('/list')
+    .expect(500);
   });
 });

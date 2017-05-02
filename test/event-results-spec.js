@@ -247,4 +247,15 @@ describe('GET /event/:id/results', () => {
         expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
       });
   });
+
+  it('should respond with a 500 in other cases when errors occur in server', () => {
+    const errorObject = {
+      name: 'not CastError'
+    };
+    // DB stub returns error
+    stubForFindOne.rejects(errorObject);
+    return request
+      .get('/2/results')
+      .expect(500);
+  });
 });

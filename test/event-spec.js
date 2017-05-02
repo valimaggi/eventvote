@@ -89,7 +89,7 @@ describe('GET /event/:id', () => {
       });
   });
 
-  it('should respond with a 404 when using non-existing id', () => {
+  it('should respond with a 404 when using valid but non-existing id', () => {
     const nonExistingId = '57fa90d046d78827c7c50f83';
     // DB stub returns null
     stubForGetOneById.resolves(null);
@@ -98,7 +98,7 @@ describe('GET /event/:id', () => {
       .expect(404);
   });
 
-  it('should respond with a not found message when using non-existing id', () => {
+  it('should respond with a not found message when using valid but non-existing id', () => {
     const nonExistingId = '57fa90d046d78827c7c50f83';
     // DB stub returns null
     stubForGetOneById.resolves(null);
