@@ -1,28 +1,27 @@
 const sinon = require('sinon');
 const bodyParser = require('body-parser');
 const expect = require('chai').expect;
-const initRequest = require('./util/test-helpers').initRequest;
-const messages = require('../common/messages');
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-
-const createEventRouter = require('../routes/event-routes');
-
-const validRequestBody = {
-  name: 'test name',
-  dates: ['2016-01-01', '2016-01-20']
-};
+const initRequest = require('../test-helpers').initRequest;
+const createEventRouter = require('../../features/event/event-routes');
+const messages = require('../../common/messages');
 
 describe('POST /event', () => {
   let createEventRouterRequest;
   let stubForCreate;
   let request;
 
+  const validRequestBody = {
+    name: 'test name',
+    dates: ['2016-01-01', '2016-01-20']
+  };
+
   before(() => {
     createEventRouterRequest = initRequest(createEventRouter, bodyParser.json());
     stubForCreate = sinon.stub();
-    request = createEventRouterRequest('../../features/event-feature', {
-      '../models/event': {
+    request = createEventRouterRequest('../features/event/event-feature', {
+      './event-model': {
         create: stubForCreate
       }
     });

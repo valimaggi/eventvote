@@ -1,10 +1,11 @@
 const sinon = require('sinon');
 const expect = require('chai').expect;
-const initRequest = require('./util/test-helpers').initRequest;
-const messages = require('../common/messages');
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const createEventRouter = require('../routes/event-routes');
+const initRequest = require('../test-helpers').initRequest;
+const createEventRouter = require('../../features/event/event-routes');
+const commonMessages = require('../../common/messages');
+const eventMessages = require('../../features/event/messages');
 
 describe('GET /event/:id/results', () => {
   let createEventRouterRequest;
@@ -14,8 +15,8 @@ describe('GET /event/:id/results', () => {
   before(() => {
     createEventRouterRequest = initRequest(createEventRouter);
     stubForFindOne = sinon.stub();
-    request = createEventRouterRequest('../../features/event-feature', {
-      '../models/event': {
+    request = createEventRouterRequest('../features/event/event-feature', {
+      './event-model': {
         findOne: stubForFindOne
       }
     });
@@ -231,7 +232,7 @@ describe('GET /event/:id/results', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.NO_SUITABLE_DATE);
+        expect(res.body).to.deep.equal(eventMessages.NO_SUITABLE_DATE);
       });
   });
 
@@ -244,7 +245,7 @@ describe('GET /event/:id/results', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
+        expect(res.body).to.deep.equal(commonMessages.RESOURCE_NOT_FOUND);
       });
   });
 

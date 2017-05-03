@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-const sendServerErrorResponse = require('../util/helpers').sendServerErrorResponse;
-const INVALID_REQUEST_URL = require('../common/messages').INVALID_REQUEST_URL;
+const sendServerErrorResponse = require('../../util/helpers').sendServerErrorResponse;
+const INVALID_REQUEST_URL = require('../../common/messages').INVALID_REQUEST_URL;
 
 describe('helper sendServerErrorResponse', () => {
   let response;

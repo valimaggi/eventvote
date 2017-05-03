@@ -1,9 +1,9 @@
 const sinon = require('sinon');
 const expect = require('chai').expect;
-const initRequest = require('./util/test-helpers').initRequest;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const createEventRouter = require('../routes/event-routes');
+const initRequest = require('../test-helpers').initRequest;
+const createEventRouter = require('../../features/event/event-routes');
 
 describe('GET /event/list', () => {
   let createEventRouterRequest;
@@ -13,8 +13,8 @@ describe('GET /event/list', () => {
   before(() => {
     createEventRouterRequest = initRequest(createEventRouter);
     stubForGetAll = sinon.stub();
-    request = createEventRouterRequest('../../features/event-feature', {
-      '../models/event': {
+    request = createEventRouterRequest('../features/event/event-feature', {
+      './event-model': {
         getAll: stubForGetAll,
       }
     });

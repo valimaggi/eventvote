@@ -1,13 +1,14 @@
 const sinon = require('sinon');
 const bodyParser = require('body-parser');
 const expect = require('chai').expect;
-const initRequest = require('./util/test-helpers').initRequest;
-const createEventWithVotesFactory = require('./util/test-helpers').createEventWithVotesFactory;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const createEventRouter = require('../routes/event-routes');
-const errorStrings = require('../util/error-strings');
-const messages = require('../common/messages');
+const initRequest = require('../test-helpers').initRequest;
+const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
+const createEventRouter = require('../../features/event/event-routes');
+const errorStrings = require('../../features/event/utils').errorStrings;
+const commonMessages = require('../../common/messages');
+const eventMessages = require('../../features/event/messages');
 
 describe('POST /event/:id/vote', () => {
   let createEventRouterRequest;
@@ -19,8 +20,8 @@ describe('POST /event/:id/vote', () => {
     createEventRouterRequest = initRequest(createEventRouter, [bodyParser.json()]);
     stubForGetOneById = sinon.stub();
     stubForUpdate = sinon.stub();
-    request = createEventRouterRequest('../../features/event-feature', {
-      '../models/event': {
+    request = createEventRouterRequest('../features/event/event-feature', {
+      './event-model': {
         getOneById: stubForGetOneById,
         update: stubForUpdate
       }
@@ -204,7 +205,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
+        expect(res.body).to.deep.equal(commonMessages.RESOURCE_NOT_FOUND);
       });
   });
 
@@ -254,7 +255,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.NONEXISTENT_DATES);
+        expect(res.body).to.deep.equal(eventMessages.NONEXISTENT_DATES);
       });
   });
 });

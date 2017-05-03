@@ -5,8 +5,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const API_PREFIX = require('./config/properties').API_PREFIX;
-const createEventRouter = require('./routes/event-routes');
-const eventFeature = require('./features/event-feature');
+const createEventRouter = require('./features/event/event-routes');
+const eventFeature = require('./features/event/event-feature');
 
 const app = express();
 // Some security to Express app

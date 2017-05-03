@@ -7,7 +7,7 @@ const appWithMiddleware = (app, middlewares) => {
   return app;
 };
 
-const initRequest = (createRouter, ...middlewares) => {
+function initRequest(createRouter, ...middlewares) {
   const app = appWithMiddleware(express(), middlewares);
   return (routeHandlerModulePath, stubObject) => {
     // Module with stubbed dependency (for example model module so we don't need DB in API testing)
@@ -18,16 +18,6 @@ const initRequest = (createRouter, ...middlewares) => {
     // Supertest instance so we can make requests
     return supertest(app);
   };
-};
+}
 
-const createEventWithVotesFactory = (eventName, eventDates) =>
-  (eventIdObject, votes) =>
-    Object.assign(eventIdObject,
-      {
-        name: eventName,
-        dates: eventDates,
-        votes: votes
-      }
-    );
-
-module.exports = { initRequest, createEventWithVotesFactory };
+module.exports = { initRequest };

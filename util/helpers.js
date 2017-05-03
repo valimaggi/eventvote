@@ -1,18 +1,5 @@
 const INVALID_REQUEST_URL = require('../common/messages').INVALID_REQUEST_URL;
 
-const dateMappedEvent = (mapDate, dateFormat) =>
-  (id, name, dates, votes) => ({
-    id,
-    name,
-    dates: dates.map(date => mapDate(date, dateFormat)),
-    votes: votes.map(vote => (
-      {
-        date: mapDate(vote.date, dateFormat),
-        people: vote.people
-      }
-    ))
-  });
-
 const sendServerErrorResponse = (err, res) => {
   // If the error is CastError to _id field, the given id is invalid => 400 Bad Request
   if (Object.prototype.hasOwnProperty.call(err, 'name') && err.name === 'CastError' && Object.prototype.hasOwnProperty.call(err, 'path') && err.path === '_id') {
@@ -22,4 +9,4 @@ const sendServerErrorResponse = (err, res) => {
   return res.sendStatus(500);
 };
 
-module.exports = { dateMappedEvent, sendServerErrorResponse };
+module.exports = { sendServerErrorResponse };

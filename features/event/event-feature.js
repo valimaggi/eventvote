@@ -1,24 +1,23 @@
 const moment = require('moment');
-const validateNewEvent = require('../validation/event-validation');
-const constants = require('../common/constants');
-const messages = require('../common/messages');
-const eventModel = require('../models/event');
-const dateMappedEvent = require('../util/helpers').dateMappedEvent;
-const sendServerErrorResponse = require('../util/helpers').sendServerErrorResponse;
-const NONEXISTENT_DATES_ERROR = require('../util/error-strings').NONEXISTENT_DATES_ERROR;
-const RESOURCE_NOT_FOUND_ERROR = require('../util/error-strings').RESOURCE_NOT_FOUND_ERROR;
+const validateNewEvent = require('./event-validation');
+const constants = require('../../common/constants');
+const commonMessages = require('../../common/messages');
+const eventMessages = require('./messages');
+const eventModel = require('./event-model');
+const createDateMappedEventFactory = require('./utils').createDateMappedEventFactory;
+const sendServerErrorResponse = require('../../util/helpers').sendServerErrorResponse;
+const NONEXISTENT_DATES_ERROR = require('./utils').errorStrings.NONEXISTENT_DATES_ERROR;
+const RESOURCE_NOT_FOUND_ERROR = require('./utils').errorStrings.RESOURCE_NOT_FOUND_ERROR;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
-const createDateMappedEvent = dateMappedEvent(mapDatesWithMoment, constants.DATE_FORMAT);
+const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, constants.DATE_FORMAT);
 
 function getAllEvents(req, res) {
   eventModel.getAll()
-    .then((events) => {
-      // Only relevant data to the response
-      const responseEvents = events.map(event => (
-        { id: event._id, name: event.name }
-      ));
-      return res.status(200).json({ events: responseEvents });
+    .then((events) => { // eslint-disable-line
+      return res.status(200).json({
+        events: events.map(event => ({ id: event._id, name: event.name }))
+      });
     })
     .catch(err => sendServerErrorResponse(err, res));
 }
@@ -28,7 +27,7 @@ function getEvent(req, res) {
     .then((event) => {
       if (event === null) {
         // Nothing found so empty response
-        return res.status(404).json(messages.RESOURCE_NOT_FOUND);
+        return res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
       }
         // Only relevant data to the response
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
@@ -50,7 +49,7 @@ function createEvent(req, res) {
         .catch(err => sendServerErrorResponse(err, res));
       return;
     }
-    res.status(400).json(messages.INVALID_REQUEST_BODY);
+    res.status(400).json(commonMessages.INVALID_REQUEST_BODY);
   } catch (err) { sendServerErrorResponse(err, res); }
 }
 
@@ -99,10 +98,10 @@ function castVote(req, res) {
       // If previous promise handler returned errors
       switch (updatedEvent) {
         case RESOURCE_NOT_FOUND_ERROR:
-          res.status(404).json(messages.RESOURCE_NOT_FOUND);
+          res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
           break;
         case NONEXISTENT_DATES_ERROR:
-          res.status(404).json(messages.NONEXISTENT_DATES);
+          res.status(404).json(eventMessages.NONEXISTENT_DATES);
           break;
         default:
           // In normal situation updated event is returned
@@ -117,7 +116,7 @@ function getResults(req, res) {
     .then((event) => {
       if (event === null) {
         // Nothing found so empty response
-        return res.status(404).json(messages.RESOURCE_NOT_FOUND);
+        return res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
       }
       // Find all the person names
       // Reduce the names by going through all names of all vote object's of the event and
@@ -141,7 +140,7 @@ function getResults(req, res) {
           }))
         });
       }
-      return res.status(200).json(messages.NO_SUITABLE_DATE);
+      return res.status(200).json(eventMessages.NO_SUITABLE_DATE);
     })
     .catch(err => sendServerErrorResponse(err, res));
 }
