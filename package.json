@@ -4,8 +4,8 @@
   "description": "Scheduler for events with voting",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
-    "test:watch": "mocha --watch"
+    "test": "mocha --recursive",
+    "test:watch": "mocha --recursive --watch"
   },
   "keywords": [
     "events",
