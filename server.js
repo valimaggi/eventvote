@@ -37,6 +37,7 @@ mongoose.connect(process.env.DB_URI, { user: process.env.DB_USER, pass: process.
 
   // Start the server
   const port = process.env.SERVER_PORT;
+  if (!port) throw new Error('No port');
   app.listen(port);
   console.log(`Listening on port ${port}`);
 })
