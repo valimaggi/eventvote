@@ -13,24 +13,10 @@ const EventSchema = new Schema({
   }],
 });
 
-function getAll() {
-  return mongoose.model('Event', EventSchema).find({});
-}
-
-function getOneById(id) {
-  return mongoose.model('Event', EventSchema).findOne({ _id: id });
-}
-
-function create(newEvent) {
-  return mongoose.model('Event', EventSchema).create(newEvent);
-}
-
-function update(event) {
-  return event.save();
-}
-
-function deleteAll() {
-  return mongoose.model('Event', EventSchema).remove({});
-}
+const getAll = () => mongoose.model('Event', EventSchema).find({});
+const getOneById = id => mongoose.model('Event', EventSchema).findOne({ _id: id });
+const create = newEvent => mongoose.model('Event', EventSchema).create(newEvent);
+const update = event => event.save();
+const deleteAll = () => mongoose.model('Event', EventSchema).remove({});
 
 module.exports = { getAll, getOneById, create, update, deleteAll };

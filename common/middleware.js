@@ -1,8 +1,7 @@
-function applyMiddleware(...middlewares) {
-  return (app) => {
+const applyMiddleware = (...middlewares) =>
+  (app) => {
     middlewares.forEach(mw => app.use(mw));
     return app;
   };
-}
 
-module.exports = applyMiddleware;
+module.exports = { applyMiddleware };

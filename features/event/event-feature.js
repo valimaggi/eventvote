@@ -12,7 +12,9 @@ const RESOURCE_NOT_FOUND_ERROR = require('./utils').errorStrings.RESOURCE_NOT_FO
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
 const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, constants.DATE_FORMAT);
 
-function getAllEvents(req, res) {
+// Public functions
+
+const getAllEvents = (req, res) => {
   eventModel.getAll()
     .then((events) => { // eslint-disable-line
       return res.status(200).json({
@@ -20,9 +22,9 @@ function getAllEvents(req, res) {
       });
     })
     .catch(err => sendErrorResponse(err, res));
-}
+};
 
-function getEvent(req, res) {
+const getEvent = (req, res) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
@@ -33,9 +35,9 @@ function getEvent(req, res) {
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
     })
     .catch(err => sendErrorResponse(err, res));
-}
+};
 
-function createEvent(req, res) {
+const createEvent = (req, res) => {
   if (validation.validateNewEventRequest(req)) {
     const newEvent = {
       name: req.body.name,
@@ -49,9 +51,9 @@ function createEvent(req, res) {
     return;
   }
   res.status(400).json(commonMessages.INVALID_REQUEST_BODY);
-}
+};
 
-function castVote(req, res) {
+const castVote = (req, res) => {
   if (validation.validateVoteRequest(req)) {
     eventModel.getOneById(req.params.id)
       .then((event) => {
@@ -111,9 +113,9 @@ function castVote(req, res) {
     return;
   }
   res.status(400).json(commonMessages.INVALID_REQUEST_BODY);
-}
+};
 
-function getResults(req, res) {
+const getResults = (req, res) => {
   eventModel.findOne({ _id: req.params.id })
     .then((event) => {
       if (event === null) {
@@ -145,14 +147,14 @@ function getResults(req, res) {
       return res.status(200).json(eventMessages.NO_SUITABLE_DATE);
     })
     .catch(err => sendErrorResponse(err, res));
-}
+};
 
-function deleteAllEvents(req, res) {
+const deleteAllEvents = (req, res) => {
   eventModel.deleteAll()
     .then(() => {
       res.sendStatus(204);
     })
     .catch(err => sendErrorResponse(err, res));
-}
+};
 
 module.exports = { getAllEvents, getEvent, createEvent, castVote, getResults, deleteAllEvents };

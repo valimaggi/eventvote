@@ -3,7 +3,7 @@ const proxyquire = require('proxyquire');
 const supertest = require('supertest');
 const applyMiddleware = require('../common/middleware').applyMiddleware;
 
-function initRequest(createRouter, ...middlewares) {
+const initRequest = (createRouter, ...middlewares) => {
   const app = applyMiddleware(...middlewares)(express());
   return (routeHandlerModulePath, stubObject) => {
     // Module with stubbed dependency (for example model module so we don't need DB in API testing)
@@ -14,6 +14,6 @@ function initRequest(createRouter, ...middlewares) {
     // Supertest instance so we can make requests
     return supertest(app);
   };
-}
+};
 
 module.exports = { initRequest };

@@ -1,5 +1,5 @@
-function createDateMappedEventFactory(mapDate, dateFormat) {
-  return (id, name, dates, votes) => ({
+const createDateMappedEventFactory = (mapDate, dateFormat) =>
+  (id, name, dates, votes) => ({
     id,
     name,
     dates: dates.map(date => mapDate(date, dateFormat)),
@@ -10,7 +10,6 @@ function createDateMappedEventFactory(mapDate, dateFormat) {
       }
     ))
   });
-}
 
 const errorStrings = {
   NONEXISTENT_DATES_ERROR: 'NONEXISTENT_DATES_ERROR',

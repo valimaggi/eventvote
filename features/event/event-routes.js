@@ -1,6 +1,6 @@
 const express = require('express');
 
-function createEventRouter(feature) {
+const createEventRouter = (feature) => {
   const router = new express.Router();
 
   // Route definitions
@@ -11,6 +11,6 @@ function createEventRouter(feature) {
   router.get('/:id/results', feature.getResults);
   router.delete('', feature.deleteAllEvents);
   return router;
-}
+};
 
 module.exports = createEventRouter;
