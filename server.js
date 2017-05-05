@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const database = require('./config/database');
-const applyMiddleware = require('./common/middleware');
+const applyMiddleware = require('./common/middleware').applyMiddleware;
 const helmetFunctions = require('./config/security');
 require('dotenv').config();
 const API_PREFIX = require('./config/properties').API_PREFIX;
