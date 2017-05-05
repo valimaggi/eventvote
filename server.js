@@ -15,8 +15,6 @@ const app = applyMiddleware(
   ...helmetFunctions // HTTP header setting functions for some security
   )(express());
 
-// Database connection. Set the native ES6 promise to mongoose since
-// mongoose's mpromise is deprecated
 database.connect(process.env.DB_URI, process.env.DB_USER, process.env.DB_PASS)
 .then(() => {
   // Setting routes
