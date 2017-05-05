@@ -1,27 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const helmet = require('helmet');
 const mongoose = require('mongoose');
+const applyMiddleware = require('./common/middleware');
+const helmetFunctions = require('./config/security');
 require('dotenv').config();
 const API_PREFIX = require('./config/properties').API_PREFIX;
 const createEventRouter = require('./features/event/event-routes');
 const eventFeature = require('./features/event/event-feature');
 
-const app = express();
-// Some security to Express app
-app.use(helmet.hidePoweredBy());
-app.use(helmet.dnsPrefetchControl());
-app.use(helmet.frameguard({ action: 'sameorigin' }));
-app.use(helmet.ieNoOpen());
-app.use(helmet.noSniff());
-app.use(helmet.xssFilter());
-const SIXTY_DAYS_IN_SECONDS = 5184000;
-app.use(helmet.hsts({ maxAge: SIXTY_DAYS_IN_SECONDS }));
-// Body-parser parses JSON requests
-app.use(bodyParser.json());
-// API logging
-app.use(morgan('dev'));
+const app = applyMiddleware(
+  morgan('dev'), // API logging
+  bodyParser.json(), // JSON requests
+  ...helmetFunctions
+  )(express());
+
 
 // Database connection. Set the native ES6 promise to mongoose since
 // mongoose's mpromise is deprecated
