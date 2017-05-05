@@ -1,15 +1,15 @@
 const express = require('express');
 
-function createEventRouter(service) {
+function createEventRouter(feature) {
   const router = new express.Router();
 
   // Route definitions
-  router.get('/list', service.getAllEvents);
-  router.get('/:id', service.getEvent);
-  router.post('', service.createEvent);
-  router.post('/:id/vote', service.castVote);
-  router.get('/:id/results', service.getResults);
-  router.delete('', service.deleteAllEvents);
+  router.get('/list', feature.getAllEvents);
+  router.get('/:id', feature.getEvent);
+  router.post('', feature.createEvent);
+  router.post('/:id/vote', feature.castVote);
+  router.get('/:id/results', feature.getResults);
+  router.delete('', feature.deleteAllEvents);
   return router;
 }
 
