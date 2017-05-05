@@ -60,7 +60,7 @@ describe('POST /event', () => {
   });
 
   // eslint-disable-next-line
-  it('should respond with a 400 when posting invalid (empty) event', () => {
+  it('should respond with a 400 when posting invalid (no body) event', () => {
     return request
       .post('/')
       .send()
@@ -68,7 +68,7 @@ describe('POST /event', () => {
   });
 
   // eslint-disable-next-line
-  it('should respond with an error message when posting invalid (empty) event', () => {
+  it('should respond with an error message when posting invalid (no body) event', () => {
     return request
       .post('/')
       .send()
