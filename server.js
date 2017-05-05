@@ -6,8 +6,7 @@ const applyMiddleware = require('./common/middleware').applyMiddleware;
 const helmetFunctions = require('./config/security');
 require('dotenv').config();
 const API_PREFIX = require('./config/properties').API_PREFIX;
-const createEventRouter = require('./features/event/event-routes');
-const eventFeature = require('./features/event/event-feature');
+const createRootRouter = require('./root-router');
 
 const app = applyMiddleware(
   morgan('dev'), // API logging
@@ -17,12 +16,8 @@ const app = applyMiddleware(
 
 database.connect(process.env.DB_URI, process.env.DB_USER, process.env.DB_PASS)
 .then(() => {
-  // Setting routes
-  const rootRouter = new express.Router();
-  rootRouter.use('/event', createEventRouter(eventFeature));
-
-  // API prefix for the root router
-  app.use(API_PREFIX, rootRouter);
+  // Set the root router with the API prefix
+  app.use(API_PREFIX, createRootRouter());
 
   // Start the server
   const port = process.env.SERVER_PORT;
