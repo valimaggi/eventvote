@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
+const database = require('./config/database');
 const applyMiddleware = require('./common/middleware');
 const helmetFunctions = require('./config/security');
 require('dotenv').config();
@@ -12,14 +12,12 @@ const eventFeature = require('./features/event/event-feature');
 const app = applyMiddleware(
   morgan('dev'), // API logging
   bodyParser.json(), // JSON requests
-  ...helmetFunctions
+  ...helmetFunctions // HTTP header setting functions for some security
   )(express());
-
 
 // Database connection. Set the native ES6 promise to mongoose since
 // mongoose's mpromise is deprecated
-mongoose.Promise = Promise;
-mongoose.connect(process.env.DB_URI, { user: process.env.DB_USER, pass: process.env.DB_PASS })
+database.connect(process.env.DB_URI, process.env.DB_USER, process.env.DB_PASS)
 .then(() => {
   // Setting routes
   const rootRouter = new express.Router();
