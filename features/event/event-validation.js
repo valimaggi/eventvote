@@ -1,6 +1,6 @@
 const isEmpty = require('lodash/isEmpty');
 
-function validateNewEvent(req) {
+function validateNewEventRequest(req) {
   if (req === undefined || isEmpty(req)) return false;
   if (!Object.prototype.hasOwnProperty.call(req, 'body') || req.body === undefined || isEmpty(req.body)) return false;
   if (!Object.prototype.hasOwnProperty.call(req.body, 'name') || req.body.name === undefined || isEmpty(req.body.name)) return false;
@@ -10,4 +10,8 @@ function validateNewEvent(req) {
   return true;
 }
 
-module.exports = validateNewEvent;
+function validateVoteRequest(req) {
+  return true;
+}
+
+module.exports = { validateNewEventRequest, validateVoteRequest };
