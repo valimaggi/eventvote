@@ -86,7 +86,7 @@ const castVote = (req, res, next) => {
 };
 
 const getResults = (req, res) => {
-  eventModel.findOne({ _id: req.params.id })
+  eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
         // Nothing found so empty response

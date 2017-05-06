@@ -4,19 +4,20 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 
 const initRequest = require('../test-helpers').initRequest;
 const createEventRouter = require('../../features/event/event-routes');
+const { createInvalidIdErrorObject } = require('./utils');
 const messages = require('../../features/event/messages');
 
 describe('GET /event/:id/results', () => {
   let createEventRouterRequest;
-  let stubForFindOne;
+  let stubForGetOneById;
   let request;
 
   before(() => {
     createEventRouterRequest = initRequest();
-    stubForFindOne = sinon.stub();
+    stubForGetOneById = sinon.stub();
     request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
-        findOne: stubForFindOne
+        getOneById: stubForGetOneById
       }
     });
   });
@@ -24,7 +25,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and one date found from one voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    stubForFindOne.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -58,7 +59,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and one date found from two voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    stubForFindOne.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -96,7 +97,7 @@ describe('GET /event/:id/results', () => {
   it('should respond with a 200 and two dates found from three voted date', () => {
     const testId = 2;
     // DB stub returns an event
-    stubForFindOne.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -139,10 +140,10 @@ describe('GET /event/:id/results', () => {
       });
   });
 
-  it('should respond with a 200 and no suitable date found', () => {
+  it('should respond with a 200 and error message when no suitable dates found', () => {
     const testId = 2;
     // DB stub returns an event
-    stubForFindOne.resolves(
+    stubForGetOneById.resolves(
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
@@ -172,10 +173,10 @@ describe('GET /event/:id/results', () => {
       });
   });
 
-  it('should respond with a 200 and not found', () => {
+  it('should respond with a 200 and not found when using non-existing id', () => {
     const nonExistingId = 'jhy8b';
     // DB stub returns null
-    stubForFindOne.resolves(null);
+    stubForGetOneById.resolves(null);
     return request
       .get('/' + nonExistingId + '/results')
       .expect('Content-Type', /json/)
@@ -185,12 +186,36 @@ describe('GET /event/:id/results', () => {
       });
   });
 
+  it('should respond with a 400 when using invalid id', () => {
+    const invalidId = '57fa90d046d78827c7c50f8';
+    const errorObject = createInvalidIdErrorObject(invalidId);
+    // DB stub returns null
+    stubForGetOneById.rejects(errorObject);
+    return request
+      .get('/' + invalidId + '/results')
+      .expect(400);
+  });
+
+  it('should respond with an error message when using invalid id', () => {
+    const invalidId = '57fa90d046d78827c7c50f8';
+    const errorObject = createInvalidIdErrorObject(invalidId);
+    // DB stub returns null
+    stubForGetOneById.rejects(errorObject);
+    return request
+      .get('/' + invalidId + '/results')
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_URL);
+      });
+  });
+
   it('should respond with a 500 in other cases when errors occur in server', () => {
     const errorObject = {
       name: 'not CastError'
     };
     // DB stub returns error
-    stubForFindOne.rejects(errorObject);
+    stubForGetOneById.rejects(errorObject);
     return request
       .get('/2/results')
       .expect(500);
