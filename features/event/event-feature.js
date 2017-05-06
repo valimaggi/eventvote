@@ -5,7 +5,7 @@ const eventMessages = require('./messages');
 const eventModel = require('./event-model');
 const createDateMappedEventFactory = require('./utils').createDateMappedEventFactory;
 const sendErrorResponse = require('../../util/helpers').sendErrorResponse;
-const errors = require('./utils').errors;
+const errors = require('./event-error-handlers').errors;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
 const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, constants.DATE_FORMAT);

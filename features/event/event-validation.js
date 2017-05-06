@@ -1,10 +1,5 @@
 const isEmpty = require('lodash/isEmpty');
 const commonMessages = require('../../common/messages');
-const eventMessages = require('./messages');
-const errors = require('./utils').errors;
-
-const isResourceNotFoundError = error => error.message && error.message === errors.RESOURCE_NOT_FOUND_ERROR;
-const isDatesNotFoundError = error => error.message && error.message === errors.NONEXISTENT_DATES_ERROR;
 
 const create = (req, res, next) => {
   // eslint-disable-line
@@ -39,13 +34,4 @@ const castVote = (req, res, next) => {
   return next();
 };
 
-const castVoteError = (err, req, res, next) => {
-  if (isResourceNotFoundError(err)) {
-    return res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
-  } else if (isDatesNotFoundError(err)) {
-    return res.status(404).json(eventMessages.NONEXISTENT_DATES);
-  }
-  return next();
-};
-
-module.exports = { create, castVote, castVoteError };
+module.exports = { create, castVote };
