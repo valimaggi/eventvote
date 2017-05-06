@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-const createDateMappedEventFactory = require('../../features/event/utils').createDateMappedEventFactory;
 const moment = require('moment');
+const { createDateMappedEventFactory } = require('../../features/event/utils');
 
 describe('createDateMappedEventFactory', () => {
   let createDateMappedEvent;

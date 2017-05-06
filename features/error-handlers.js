@@ -1,4 +1,4 @@
-const messages = require('../common/messages');
+const { RESOURCE_NOT_FOUND } = require('../common/messages');
 
 const RESOURCE_NOT_FOUND_ERROR = 'RESOURCE_NOT_FOUND_ERROR';
 
@@ -6,7 +6,7 @@ const serverErrorHandler = (err, req, res, next) => res.sendStatus(500); // esli
 
 const resourceNotFound = (err, req, res, next) => {
   if (err.message && err.message === RESOURCE_NOT_FOUND_ERROR) {
-    return res.status(404).json(messages.RESOURCE_NOT_FOUND);
+    return res.status(404).json(RESOURCE_NOT_FOUND);
   }
   return next(err);
 };

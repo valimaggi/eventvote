@@ -3,12 +3,12 @@ const bodyParser = require('body-parser');
 const expect = require('chai').expect;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const initRequest = require('../test-helpers').initRequest;
-const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
+const { initRequest } = require('../test-helpers');
+const { createEventWithVotesFactory } = require('./utils');
 const createEventRouter = require('../../features/event/event-routes');
-const createInvalidIdErrorObject = require('./utils').createInvalidIdErrorObject;
-const errors = require('../../features/event/event-error-handlers').errors;
-const messages = require('../../features/event/messages');
+const { createInvalidIdErrorObject } = require('./utils');
+const { NONEXISTENT_DATES_ERROR } = require('../../features/event/event-error-handlers').errors;
+const { RESOURCE_NOT_FOUND, INVALID_REQUEST_URL, NONEXISTENT_DATES, INVALID_REQUEST_BODY } = require('../../features/event/messages');
 
 describe('POST /event/:id/vote', () => {
   let createEventRouterRequest;
@@ -200,7 +200,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
+        expect(res.body).to.deep.equal(RESOURCE_NOT_FOUND);
       });
   });
 
@@ -233,7 +233,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_URL);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_URL);
       });
   });
 
@@ -252,7 +252,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.rejects(Error(errors.NONEXISTENT_DATES_ERROR));
+    stubForUpdate.rejects(Error(NONEXISTENT_DATES_ERROR));
 
     return request
       .post('/' + testEventId + '/vote')
@@ -274,7 +274,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.rejects(Error(errors.NONEXISTENT_DATES_ERROR));
+    stubForUpdate.rejects(Error(NONEXISTENT_DATES_ERROR));
 
     return request
       .post('/' + testEventId + '/vote')
@@ -282,7 +282,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.NONEXISTENT_DATES);
+        expect(res.body).to.deep.equal(NONEXISTENT_DATES);
       });
   });
 
@@ -296,7 +296,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -310,7 +310,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -325,7 +325,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -340,7 +340,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -355,7 +355,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -370,7 +370,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -385,7 +385,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 });

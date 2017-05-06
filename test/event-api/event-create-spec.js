@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const expect = require('chai').expect;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const initRequest = require('../test-helpers').initRequest;
+const { initRequest } = require('../test-helpers');
 const createEventRouter = require('../../features/event/event-routes');
-const messages = require('../../common/messages');
+const { INVALID_REQUEST_BODY } = require('../../common/messages');
 
 describe('POST /event', () => {
   let createEventRouterRequest;
@@ -76,7 +76,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -88,7 +88,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -101,7 +101,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -114,7 +114,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -127,7 +127,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 
@@ -140,7 +140,7 @@ describe('POST /event', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_BODY);
       });
   });
 

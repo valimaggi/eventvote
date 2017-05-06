@@ -2,10 +2,10 @@ const sinon = require('sinon');
 const expect = require('chai').expect;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
-const initRequest = require('../test-helpers').initRequest;
+const { initRequest } = require('../test-helpers');
 const createEventRouter = require('../../features/event/event-routes');
 const { createInvalidIdErrorObject } = require('./utils');
-const messages = require('../../common/messages');
+const { RESOURCE_NOT_FOUND, INVALID_REQUEST_URL } = require('../../common/messages');
 
 describe('GET /event/:id', () => {
   let createEventRouterRequest;
@@ -92,7 +92,7 @@ describe('GET /event/:id', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
+        expect(res.body).to.deep.equal(RESOURCE_NOT_FOUND);
       });
   });
 
@@ -116,7 +116,7 @@ describe('GET /event/:id', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_URL);
+        expect(res.body).to.deep.equal(INVALID_REQUEST_URL);
       });
   });
 
