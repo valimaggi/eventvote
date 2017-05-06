@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const winston = require('winston');
 const database = require('./config/database');
+require('dotenv').config();
 const { applyMiddleware } = require('./common/middleware');
 const helmetFunctions = require('./config/security');
-const winston = require('winston');
-require('dotenv').config();
-const API_PREFIX = require('./config/properties').API_PREFIX;
+const { API_PREFIX } = require('./config/properties');
 const createRootRouter = require('./root-router');
 
 const app = applyMiddleware(
