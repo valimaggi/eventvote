@@ -218,6 +218,21 @@ describe('POST /event/:id/vote', () => {
       .post('/' + invalidEventId + '/vote')
       .send({ name: testVoterName, votes: [testVoteDate] })
       .expect('Content-Type', /json/)
+      .expect(400);
+  });
+
+  it('should respond with an error message when voting with invalid event id', () => {
+    const invalidEventId = '57fa90d046d78827c7c50f8';
+    const testVoterName = 'Mikko';
+    const testVoteDate = '2014-01-01';
+    const errorObject = createErrorObject(invalidEventId);
+
+    stubForGetOneById.rejects(errorObject);
+
+    return request
+      .post('/' + invalidEventId + '/vote')
+      .send({ name: testVoterName, votes: [testVoteDate] })
+      .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
         expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_URL);
