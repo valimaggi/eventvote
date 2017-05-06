@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const database = require('./config/database');
-const applyMiddleware = require('./common/middleware').applyMiddleware;
+const { applyMiddleware } = require('./common/middleware');
 const helmetFunctions = require('./config/security');
 const winston = require('winston');
 require('dotenv').config();
