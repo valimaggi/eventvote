@@ -4,7 +4,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 
 const initRequest = require('../test-helpers').initRequest;
 const createEventRouter = require('../../features/event/event-routes');
-const createErrorObject = require('./utils').createErrorObject;
+const { createInvalidIdErrorObject } = require('./utils');
 const messages = require('../../common/messages');
 
 describe('GET /event/:id', () => {
@@ -44,21 +44,8 @@ describe('GET /event/:id', () => {
       {
         _id: testId,
         name: 'Mikko\'s awesome party',
-        dates: [
-          '2014-01-01',
-          '2014-01-05',
-          '2014-01-12'
-        ],
-        votes: [
-          {
-            date: '2014-01-01',
-            people: [
-              'Mikko',
-              'Heidi',
-              'Tyrsky'
-            ]
-          }
-        ]
+        dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
+        votes: [{ date: '2014-01-01', people: ['Mikko', 'Heidi', 'Tyrsky'] }]
       }
     );
     return request
@@ -70,21 +57,8 @@ describe('GET /event/:id', () => {
           {
             id: testId,
             name: 'Mikko\'s awesome party',
-            dates: [
-              '2014-01-01',
-              '2014-01-05',
-              '2014-01-12'
-            ],
-            votes: [
-              {
-                date: '2014-01-01',
-                people: [
-                  'Mikko',
-                  'Heidi',
-                  'Tyrsky'
-                ]
-              }
-            ]
+            dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
+            votes: [{ date: '2014-01-01', people: ['Mikko', 'Heidi', 'Tyrsky'] }]
           }
         );
       });
@@ -114,7 +88,7 @@ describe('GET /event/:id', () => {
 
   it('should respond with a 400 when using invalid id', () => {
     const invalidId = '57fa90d046d78827c7c50f8';
-    const errorObject = createErrorObject(invalidId);
+    const errorObject = createInvalidIdErrorObject(invalidId);
     // DB stub returns null
     stubForGetOneById.rejects(errorObject);
     return request
@@ -124,7 +98,7 @@ describe('GET /event/:id', () => {
 
   it('should respond with an error message when using invalid id', () => {
     const invalidId = '57fa90d046d78827c7c50f8';
-    const errorObject = createErrorObject(invalidId);
+    const errorObject = createInvalidIdErrorObject(invalidId);
     // DB stub returns null
     stubForGetOneById.rejects(errorObject);
     return request
