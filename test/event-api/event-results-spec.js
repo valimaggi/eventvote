@@ -13,9 +13,9 @@ describe('GET /event/:id/results', () => {
   let request;
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter);
+    createEventRouterRequest = initRequest();
     stubForFindOne = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         findOne: stubForFindOne
       }

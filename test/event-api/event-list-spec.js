@@ -11,9 +11,9 @@ describe('GET /event/list', () => {
   let request;
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter);
+    createEventRouterRequest = initRequest();
     stubForGetAll = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         getAll: stubForGetAll,
       }

@@ -3,9 +3,9 @@ const proxyquire = require('proxyquire');
 const supertest = require('supertest');
 const applyMiddleware = require('../common/middleware').applyMiddleware;
 
-const initRequest = (createRouter, ...middlewares) => {
+const initRequest = (...middlewares) => {
   const app = applyMiddleware(...middlewares)(express());
-  return (routeHandlerModulePath, stubObject) => {
+  return (createRouter, routeHandlerModulePath, stubObject) => {
     // Module with stubbed dependency (for example model module so we don't need DB in API testing)
     // Proxyquire enables stubbing the modules of the required module
     const routeHandlerModule = proxyquire(routeHandlerModulePath, stubObject);

@@ -18,9 +18,9 @@ describe('POST /event', () => {
   };
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter, bodyParser.json());
+    createEventRouterRequest = initRequest(bodyParser.json());
     stubForCreate = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         create: stubForCreate
       }

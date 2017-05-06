@@ -12,9 +12,9 @@ describe('GET /event/:id', () => {
   let request;
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter);
+    createEventRouterRequest = initRequest();
     stubForGetOneById = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         getOneById: stubForGetOneById
       }

@@ -11,9 +11,9 @@ describe('DELETE /event', () => {
   let request;
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter);
+    createEventRouterRequest = initRequest();
     stubForDeleteAll = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         deleteAll: stubForDeleteAll
       }

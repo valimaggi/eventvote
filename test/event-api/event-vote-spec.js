@@ -17,10 +17,10 @@ describe('POST /event/:id/vote', () => {
   let request;
 
   before(() => {
-    createEventRouterRequest = initRequest(createEventRouter, [bodyParser.json()]);
+    createEventRouterRequest = initRequest(bodyParser.json());
     stubForGetOneById = sinon.stub();
     stubForUpdate = sinon.stub();
-    request = createEventRouterRequest('../features/event/event-feature', {
+    request = createEventRouterRequest(createEventRouter, '../features/event/event-feature', {
       './event-model': {
         getOneById: stubForGetOneById,
         update: stubForUpdate
