@@ -39,16 +39,12 @@ describe('GET /event/list', () => {
       {
         _id: '1',
         name: 'party',
-        dates: [
-          '2016-12-01',
-        ],
+        dates: ['2016-12-01']
       },
       {
         _id: '2',
         name: 'party 2',
-        dates: [
-          '2017-12-01',
-        ]
+        dates: ['2017-12-01']
       }
     ]);
     return request

@@ -45,7 +45,12 @@ describe('GET /event/:id', () => {
         _id: testId,
         name: 'Mikko\'s awesome party',
         dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
-        votes: [{ date: '2014-01-01', people: ['Mikko', 'Heidi', 'Tyrsky'] }]
+        votes: [
+          {
+            date: '2014-01-01',
+            people: ['Mikko', 'Heidi', 'Tyrsky']
+          }
+        ]
       }
     );
     return request
@@ -58,7 +63,12 @@ describe('GET /event/:id', () => {
             id: testId,
             name: 'Mikko\'s awesome party',
             dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
-            votes: [{ date: '2014-01-01', people: ['Mikko', 'Heidi', 'Tyrsky'] }]
+            votes: [
+              {
+                date: '2014-01-01',
+                people: ['Mikko', 'Heidi', 'Tyrsky']
+              }
+            ]
           }
         );
       });

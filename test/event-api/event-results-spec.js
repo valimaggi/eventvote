@@ -28,19 +28,11 @@ describe('GET /event/:id/results', () => {
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
-        dates: [
-          '2014-01-01',
-          '2014-01-05',
-          '2014-01-12'
-        ],
+        dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
         votes: [
           {
             date: '2014-01-01',
-            people: [
-              'Matt',
-              'Heidi',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Heidi', 'Tyrsky']
           }
         ]
       }
@@ -56,11 +48,7 @@ describe('GET /event/:id/results', () => {
           suitableDates: [
             {
               date: '2014-01-01',
-              people: [
-                'Matt',
-                'Heidi',
-                'Tyrsky'
-              ]
+              people: ['Matt', 'Heidi', 'Tyrsky']
             }
           ]
         });
@@ -74,26 +62,15 @@ describe('GET /event/:id/results', () => {
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
-        dates: [
-          '2014-01-01',
-          '2014-01-05',
-          '2014-01-12'
-        ],
+        dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
         votes: [
           {
             date: '2014-01-01',
-            people: [
-              'Matt',
-              'Heidi',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Heidi', 'Tyrsky']
           },
           {
             date: '2014-01-05',
-            people: [
-              'Matt',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Tyrsky']
           }
         ]
       }
@@ -109,11 +86,7 @@ describe('GET /event/:id/results', () => {
           suitableDates: [
             {
               date: '2014-01-01',
-              people: [
-                'Matt',
-                'Heidi',
-                'Tyrsky'
-              ]
+              people: ['Matt', 'Heidi', 'Tyrsky']
             }
           ]
         });
@@ -127,34 +100,19 @@ describe('GET /event/:id/results', () => {
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
-        dates: [
-          '2014-01-01',
-          '2014-01-05',
-          '2014-01-12'
-        ],
+        dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
         votes: [
           {
             date: '2014-01-01',
-            people: [
-              'Matt',
-              'Heidi',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Heidi', 'Tyrsky']
           },
           {
             date: '2014-01-05',
-            people: [
-              'Matt',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Tyrsky']
           },
           {
             date: '2014-01-12',
-            people: [
-              'Heidi',
-              'Matt',
-              'Tyrsky'
-            ]
+            people: ['Heidi', 'Matt', 'Tyrsky']
           }
         ]
       }
@@ -170,19 +128,11 @@ describe('GET /event/:id/results', () => {
           suitableDates: [
             {
               date: '2014-01-01',
-              people: [
-                'Matt',
-                'Heidi',
-                'Tyrsky'
-              ]
+              people: ['Matt', 'Heidi', 'Tyrsky']
             },
             {
               date: '2014-01-12',
-              people: [
-                'Matt',
-                'Heidi',
-                'Tyrsky'
-              ]
+              people: ['Matt', 'Heidi', 'Tyrsky']
             }
           ]
         });
@@ -196,32 +146,19 @@ describe('GET /event/:id/results', () => {
       {
         _id: testId,
         name: 'Tyrsky\'s secret party',
-        dates: [
-          '2014-01-01',
-          '2014-01-05',
-          '2014-01-12'
-        ],
+        dates: ['2014-01-01', '2014-01-05', '2014-01-12'],
         votes: [
           {
             date: '2014-01-01',
-            people: [
-              'Matt',
-              'Heidi',
-              'Tyrsky'
-            ]
+            people: ['Matt', 'Heidi', 'Tyrsky']
           },
           {
             date: '2014-01-05',
-            people: [
-              'Matt'
-            ]
+            people: ['Matt']
           },
           {
             date: '2014-01-12',
-            people: [
-              'Heidi',
-              'Jaska'
-            ]
+            people: ['Heidi', 'Jaska']
           }
         ]
       }
