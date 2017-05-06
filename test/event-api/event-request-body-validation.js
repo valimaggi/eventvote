@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const bodyParser = require('body-parser');
 const expect = require('chai').expect;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
