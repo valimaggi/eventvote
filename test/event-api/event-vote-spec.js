@@ -258,63 +258,6 @@ describe('POST /event/:id/vote', () => {
       });
   });
 
-  // eslint-disable-next-line
-  it('should respond with a 400 when posting invalid (empty) event', () => {
-    const testEventId = 2;
-    return request
-      .post('/' + testEventId + '/vote')
-      .send()
-      .expect(400);
-  });
-
-  it('should respond with an error message when posting invalid (no body) event', () => {
-    const testEventId = 2;
-    return request
-      .post('/' + testEventId + '/vote')
-      .send()
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
-      });
-  });
-
-  it('should respond with an error message when posting invalid (undefined) event', () => {
-    const testEventId = 2;
-    return request
-      .post('/' + testEventId + '/vote')
-      .send(undefined)
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
-      });
-  });
-
-  it('should respond with an error message when posting invalid (undefined) event', () => {
-    const testEventId = 2;
-    return request
-      .post('/' + testEventId + '/vote')
-      .send(undefined)
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
-      });
-  });
-
-  it('should respond with an error message when posting invalid (empty object) event', () => {
-    const testEventId = 2;
-    return request
-      .post('/' + testEventId + '/vote')
-      .send({})
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
-      });
-  });
-
   it('should respond with an error message when voting without a name property', () => {
     const testEventId = 2;
     const testVoteDate = '2014-01-02';
@@ -392,6 +335,21 @@ describe('POST /event/:id/vote', () => {
     const testEventId = 2;
     const testVoterName = 'Kalle';
     const testVoteDate = '2014-01-02';
+
+    return request
+      .post('/' + testEventId + '/vote')
+      .send({ name: testVoterName, votes: testVoteDate })
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+      });
+  });
+
+  it('should respond with an error message when voting with a object-typed votes property', () => {
+    const testEventId = 2;
+    const testVoterName = 'Kalle';
+    const testVoteDate = { date: '2014-01-02' };
 
     return request
       .post('/' + testEventId + '/vote')

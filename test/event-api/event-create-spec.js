@@ -59,50 +59,6 @@ describe('POST /event', () => {
       });
   });
 
-  // eslint-disable-next-line
-  it('should respond with a 400 when posting invalid (no body) event', () => {
-    return request
-      .post('/')
-      .send()
-      .expect(400);
-  });
-
-  // eslint-disable-next-line
-  it('should respond with an error message when posting invalid (no body) event', () => {
-    return request
-      .post('/')
-      .send()
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
-      });
-  });
-
-  // eslint-disable-next-line
-  it('should respond with an error message when posting invalid (undefined) event', () => {
-    return request
-      .post('/')
-      .send(undefined)
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
-      });
-  });
-
-  // eslint-disable-next-line
-  it('should respond with an error message when posting invalid (empty object) event', () => {
-    return request
-      .post('/')
-      .send({})
-      .expect('Content-Type', /json/)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
-      });
-  });
-
   it('should respond with a 400 message when posting an event without a dates property', () => {
     const testName = 'test name';
     return request
