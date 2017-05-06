@@ -5,8 +5,7 @@ const eventMessages = require('./messages');
 const eventModel = require('./event-model');
 const createDateMappedEventFactory = require('./utils').createDateMappedEventFactory;
 const sendErrorResponse = require('../../util/helpers').sendErrorResponse;
-const NONEXISTENT_DATES_ERROR = require('./utils').errorStrings.NONEXISTENT_DATES_ERROR;
-const RESOURCE_NOT_FOUND_ERROR = require('./utils').errorStrings.RESOURCE_NOT_FOUND_ERROR;
+const errors = require('./utils').errors;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
 const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, constants.DATE_FORMAT);
@@ -48,25 +47,22 @@ const createEvent = (req, res) => {
     .catch(err => sendErrorResponse(err, res));
 };
 
-const castVote = (req, res) => {
+const castVote = (req, res, next) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
-        // Nothing found, return the error to the next promise handler in the chain
-        return RESOURCE_NOT_FOUND_ERROR;
+        throw Error(errors.RESOURCE_NOT_FOUND_ERROR);
       }
       // Check every date in request body. If the date is new or existing one.
       // Then add vote for the date.
-      // Non-existent date interrupts the process and response is sent
-      let nonExistentDate = false;
+      // Non-existent date interrupts the process and error is thrown
       for (const votedDate of req.body.votes) {
         // First check that date is one of event's dates
         const foundDate = event.dates.find(eventDate =>
           moment(eventDate).format(constants.DATE_FORMAT) === votedDate
         );
         if (foundDate === undefined) {
-          nonExistentDate = true;
-          break;
+          throw Error(errors.NONEXISTENT_DATES_ERROR);
         }
         // Then check if there's already votes for this date
         const voteObject = event.votes.find(vote =>
@@ -83,27 +79,11 @@ const castVote = (req, res) => {
           });
         }
       }
-      if (nonExistentDate) {
-        return NONEXISTENT_DATES_ERROR;
-      }
       // Finally update the event with new vote(s). Return promise which will be resolved next.
       return eventModel.update(event);
     })
-    .then((updatedEvent) => {
-      // If previous promise handler returned errors
-      switch (updatedEvent) {
-        case RESOURCE_NOT_FOUND_ERROR:
-          res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
-          break;
-        case NONEXISTENT_DATES_ERROR:
-          res.status(404).json(eventMessages.NONEXISTENT_DATES);
-          break;
-        default:
-          // In normal situation updated event is returned
-          res.status(200).json(createDateMappedEvent(updatedEvent._id, updatedEvent.name, updatedEvent.dates, updatedEvent.votes));
-      }
-    })
-    .catch(err => sendErrorResponse(err, res));
+    .then(updatedEvent => res.status(200).json(createDateMappedEvent(updatedEvent._id, updatedEvent.name, updatedEvent.dates, updatedEvent.votes)))
+    .catch(next);
 };
 
 const getResults = (req, res) => {

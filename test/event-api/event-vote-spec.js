@@ -6,7 +6,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 const initRequest = require('../test-helpers').initRequest;
 const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
 const createEventRouter = require('../../features/event/event-routes');
-const errorStrings = require('../../features/event/utils').errorStrings;
+const errors = require('../../features/event/utils').errors;
 const commonMessages = require('../../common/messages');
 const eventMessages = require('../../features/event/messages');
 
@@ -182,7 +182,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(null);
-    stubForUpdate.resolves(errorStrings.RESOURCE_NOT_FOUND_ERROR);
+    stubForUpdate.resolves(errors.RESOURCE_NOT_FOUND_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')
@@ -197,7 +197,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(null);
-    stubForUpdate.resolves(errorStrings.RESOURCE_NOT_FOUND_ERROR);
+    stubForUpdate.resolves(errors.RESOURCE_NOT_FOUND_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')
@@ -224,7 +224,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.resolves(errorStrings.NONEXISTENT_DATES_ERROR);
+    stubForUpdate.resolves(errors.NONEXISTENT_DATES_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')
@@ -246,7 +246,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.resolves(errorStrings.NONEXISTENT_DATES_ERROR);
+    stubForUpdate.resolves(errors.NONEXISTENT_DATES_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')

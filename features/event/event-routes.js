@@ -8,7 +8,7 @@ const createEventRouter = (feature) => {
   router.get('/list', feature.getAllEvents);
   router.get('/:id', feature.getEvent);
   router.post('', validation.create, feature.createEvent);
-  router.post('/:id/vote', validation.castVote, feature.castVote);
+  router.post('/:id/vote', validation.castVote, feature.castVote, validation.castVoteError);
   router.get('/:id/results', feature.getResults);
   router.delete('', feature.deleteAllEvents);
   return router;
