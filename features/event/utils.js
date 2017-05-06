@@ -11,9 +11,4 @@ const createDateMappedEventFactory = (mapDate, dateFormat) =>
     ))
   });
 
-const errors = {
-  NONEXISTENT_DATES_ERROR: 'NONEXISTENT_DATES_ERROR',
-  RESOURCE_NOT_FOUND_ERROR: 'RESOURCE_NOT_FOUND_ERROR'
-};
-
-module.exports = { createDateMappedEventFactory, errors };
+module.exports = { createDateMappedEventFactory };

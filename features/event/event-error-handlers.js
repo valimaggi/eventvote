@@ -1,5 +1,5 @@
 const eventMessages = require('./messages');
-const errors = require('./utils').errors;
+const errors = require('../error-handlers').errors;
 
 const NONEXISTENT_DATES_ERROR = 'NONEXISTENT_DATES_ERROR';
 

@@ -6,7 +6,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 const initRequest = require('../test-helpers').initRequest;
 const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
 const createEventRouter = require('../../features/event/event-routes');
-const errors = require('../../features/event/utils').errors;
+const errors = require('../../features/event/event-error-handlers').errors;
 const commonMessages = require('../../common/messages');
 const eventMessages = require('../../features/event/messages');
 
