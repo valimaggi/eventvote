@@ -10,6 +10,10 @@ App for event scheduling with voting. So far there is only the backend REST API.
 * Authentication
 * Deploy to Heroku or whatever
 
+#### Project structure
+
+Guideline is "by feature" so there are no folders for routes, models etc. separately. All these modules are under each feature. In the current scope, it's pretty useless, because there's only one feature, but this is also intended to be a base project structure for me.
+
 ## Install
 
 `yarn install` or `npm install`
@@ -23,10 +27,6 @@ App for event scheduling with voting. So far there is only the backend REST API.
 `npm test` to run all the tests
 
 `npm test watch` to run tests constantly after every file change
-
-## Project structure
-
-Guideline is "by feature" so there are no folders for routes, models etc. separately. All these modules are under each feature. In the current scope, it's pretty useless, because there's only one feature, but this is also intended to be a base project structure for me.
 
 ## Usage
 
