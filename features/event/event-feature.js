@@ -1,6 +1,6 @@
 const moment = require('moment');
-const constants = require('../../common/constants');
-const commonMessages = require('../../common/messages');
+const { DATE_FORMAT } = require('../../common/constants');
+const { RESOURCE_NOT_FOUND } = require('../../common/messages');
 const eventMessages = require('./messages');
 const eventModel = require('./event-model');
 const createDateMappedEventFactory = require('./utils').createDateMappedEventFactory;
@@ -8,7 +8,7 @@ const sendErrorResponse = require('../../util/helpers').sendErrorResponse;
 const errors = require('./event-error-handlers').errors;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
-const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, constants.DATE_FORMAT);
+const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, DATE_FORMAT);
 
 // Public functions
 
@@ -58,14 +58,14 @@ const castVote = (req, res, next) => {
       for (const votedDate of req.body.votes) {
         // First check that date is one of event's dates
         const foundDate = event.dates.find(eventDate =>
-          moment(eventDate).format(constants.DATE_FORMAT) === votedDate
+          moment(eventDate).isSame(votedDate, 'day')
         );
         if (foundDate === undefined) {
           throw Error(errors.NONEXISTENT_DATES_ERROR);
         }
         // Then check if there's already votes for this date
         const voteObject = event.votes.find(vote =>
-          moment(vote.date).format(constants.DATE_FORMAT) === votedDate
+          moment(vote.date).isSame(votedDate, 'day')
         );
         if (voteObject !== undefined) {
           // Date found, let's add voter name for this vote date
@@ -90,7 +90,7 @@ const getResults = (req, res) => {
     .then((event) => {
       if (event === null) {
         // Nothing found so empty response
-        return res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
+        return res.status(404).json(RESOURCE_NOT_FOUND);
       }
       // Find all the person names
       // Reduce the names by going through all names of all vote object's of the event and
@@ -109,7 +109,7 @@ const getResults = (req, res) => {
           id: event._id,
           name: event.name,
           suitableDates: suitableVotes.map(vote => ({
-            date: moment(vote.date).format(constants.DATE_FORMAT),
+            date: moment(vote.date).format(DATE_FORMAT),
             people: allNames
           }))
         });

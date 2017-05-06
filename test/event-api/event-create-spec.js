@@ -59,7 +59,16 @@ describe('POST /event', () => {
       });
   });
 
-  it('should respond with a 400 message when posting an event without a dates property', () => {
+  it('should respond with a 400 when posting an event without a dates property', () => {
+    const testName = 'test name';
+    return request
+      .post('/')
+      .send({ name: testName })
+      .expect('Content-Type', /json/)
+      .expect(400);
+  });
+
+  it('should respond with an error message when posting an event without a dates property', () => {
     const testName = 'test name';
     return request
       .post('/')
@@ -99,6 +108,32 @@ describe('POST /event', () => {
   it('should respond with a 400 message when posting an event with a string-typed dates property', () => {
     const testName = 'test name';
     const testDates = '2016-12-01';
+    return request
+      .post('/')
+      .send({ name: testName, dates: testDates })
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+      });
+  });
+
+  it('should respond with a 400 message when posting an event with dates property array with (invalid) string values instead of dates', () => {
+    const testName = 'test name';
+    const testDates = ['invalid date'];
+    return request
+      .post('/')
+      .send({ name: testName, dates: testDates })
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
+      });
+  });
+
+  it('should respond with a 400 message when posting an event with dates property array with (invalid) object values instead of dates', () => {
+    const testName = 'test name';
+    const testDates = [{}, {}];
     return request
       .post('/')
       .send({ name: testName, dates: testDates })

@@ -6,7 +6,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 const initRequest = require('../test-helpers').initRequest;
 const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
 const createEventRouter = require('../../features/event/event-routes');
-const createErrorObject = require('./utils').createErrorObject;
+const createInvalidIdErrorObject = require('./utils').createInvalidIdErrorObject;
 const errors = require('../../features/event/event-error-handlers').errors;
 const messages = require('../../features/event/messages');
 
@@ -69,7 +69,6 @@ describe('POST /event/:id/vote', () => {
       .post('/' + testEventId + '/vote')
       .send({ name: testVoterName, votes: [testVoteDate] })
       .expect('Content-Type', /json/)
-      .expect(200)
       .then((res) => {
         expect(res.body).to.deep.equal(responseEvent);
       });
@@ -209,7 +208,7 @@ describe('POST /event/:id/vote', () => {
     const invalidEventId = '57fa90d046d78827c7c50f8';
     const testVoterName = 'Mikko';
     const testVoteDate = '2014-01-01';
-    const errorObject = createErrorObject(invalidEventId);
+    const errorObject = createInvalidIdErrorObject(invalidEventId);
 
     stubForGetOneById.rejects(errorObject);
 
@@ -224,7 +223,7 @@ describe('POST /event/:id/vote', () => {
     const invalidEventId = '57fa90d046d78827c7c50f8';
     const testVoterName = 'Mikko';
     const testVoteDate = '2014-01-01';
-    const errorObject = createErrorObject(invalidEventId);
+    const errorObject = createInvalidIdErrorObject(invalidEventId);
 
     stubForGetOneById.rejects(errorObject);
 
@@ -253,7 +252,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.resolves(errors.NONEXISTENT_DATES_ERROR);
+    stubForUpdate.rejects(Error(errors.NONEXISTENT_DATES_ERROR));
 
     return request
       .post('/' + testEventId + '/vote')
@@ -275,7 +274,7 @@ describe('POST /event/:id/vote', () => {
 
     // DB stub returns an event
     stubForGetOneById.resolves(initialEvent);
-    stubForUpdate.resolves(errors.NONEXISTENT_DATES_ERROR);
+    stubForUpdate.rejects(Error(errors.NONEXISTENT_DATES_ERROR));
 
     return request
       .post('/' + testEventId + '/vote')
