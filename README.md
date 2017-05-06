@@ -2,11 +2,12 @@
 
 App for event scheduling with voting. So far there is only the backend REST API.
 
-#### What's next/missing?
-* Better data validation in the backend
-* More extensive API tests
+#### What's next/missing? (in no order)
+* Data validation (schemas) for the response body objects
+* More comprehensive API tests
 * SQL database support in addition to MongoDB
 * Frontend
+* Authentication
 * Deploy to Heroku or whatever
 
 ## Install
