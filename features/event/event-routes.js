@@ -11,8 +11,8 @@ const createEventRouter = (feature) => {
   router.get('/:id', feature.getEvent, ...composeErrorHandlers(invalidId, resourceNotFound));
   router.post('', Celebrate(create), feature.createEvent, ...composeErrorHandlers(validation));
   router.post('/:id/vote', Celebrate(castVote), feature.castVote, ...composeErrorHandlers(vote, invalidId, resourceNotFound, validation));
-  router.get('/:id/results', feature.getResults);
-  router.delete('', feature.deleteAllEvents);
+  router.get('/:id/results', feature.getResults, ...composeErrorHandlers(invalidId, resourceNotFound));
+  router.delete('', feature.deleteAllEvents, ...composeErrorHandlers());
   return router;
 };
 

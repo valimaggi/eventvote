@@ -1,11 +1,9 @@
 const moment = require('moment');
 const { DATE_FORMAT } = require('../../common/constants');
-const { RESOURCE_NOT_FOUND } = require('../../common/messages');
-const eventMessages = require('./messages');
+const { NO_SUITABLE_DATE } = require('./messages');
 const eventModel = require('./event-model');
-const createDateMappedEventFactory = require('./utils').createDateMappedEventFactory;
-const sendErrorResponse = require('../../util/helpers').sendErrorResponse;
-const errors = require('./event-error-handlers').errors;
+const { createDateMappedEventFactory } = require('./utils');
+const { RESOURCE_NOT_FOUND_ERROR, NONEXISTENT_DATES_ERROR } = require('./event-error-handlers').errors;
 
 const mapDatesWithMoment = (date, dateFormat) => moment(date).format(dateFormat);
 const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, DATE_FORMAT);
@@ -26,7 +24,7 @@ const getEvent = (req, res, next) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
-        throw Error(errors.RESOURCE_NOT_FOUND_ERROR);
+        throw Error(RESOURCE_NOT_FOUND_ERROR);
       }
         // Only relevant data to the response
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
@@ -50,7 +48,7 @@ const castVote = (req, res, next) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
-        throw Error(errors.RESOURCE_NOT_FOUND_ERROR);
+        throw Error(RESOURCE_NOT_FOUND_ERROR);
       }
       // Check every date in request body. If the date is new or existing one.
       // Then add vote for the date.
@@ -61,7 +59,7 @@ const castVote = (req, res, next) => {
           moment(eventDate).isSame(votedDate, 'day')
         );
         if (foundDate === undefined) {
-          throw Error(errors.NONEXISTENT_DATES_ERROR);
+          throw Error(NONEXISTENT_DATES_ERROR);
         }
         // Then check if there's already votes for this date
         const voteObject = event.votes.find(vote =>
@@ -85,12 +83,11 @@ const castVote = (req, res, next) => {
     .catch(next);
 };
 
-const getResults = (req, res) => {
+const getResults = (req, res, next) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
-        // Nothing found so empty response
-        return res.status(404).json(RESOURCE_NOT_FOUND);
+        throw Error(RESOURCE_NOT_FOUND_ERROR);
       }
       // Find all the person names
       // Reduce the names by going through all names of all vote object's of the event and
@@ -114,17 +111,17 @@ const getResults = (req, res) => {
           }))
         });
       }
-      return res.status(200).json(eventMessages.NO_SUITABLE_DATE);
+      return res.status(200).json(NO_SUITABLE_DATE);
     })
-    .catch(err => sendErrorResponse(err, res));
+    .catch(next);
 };
 
-const deleteAllEvents = (req, res) => {
+const deleteAllEvents = (req, res, next) => {
   eventModel.deleteAll()
     .then(() => {
       res.sendStatus(204);
     })
-    .catch(err => sendErrorResponse(err, res));
+    .catch(next);
 };
 
 module.exports = { getAllEvents, getEvent, createEvent, castVote, getResults, deleteAllEvents };
