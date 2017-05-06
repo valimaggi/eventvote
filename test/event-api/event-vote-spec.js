@@ -8,8 +8,7 @@ const createEventWithVotesFactory = require('./utils').createEventWithVotesFacto
 const createEventRouter = require('../../features/event/event-routes');
 const createErrorObject = require('./utils').createErrorObject;
 const errors = require('../../features/event/event-error-handlers').errors;
-const commonMessages = require('../../common/messages');
-const eventMessages = require('../../features/event/messages');
+const messages = require('../../features/event/messages');
 
 describe('POST /event/:id/vote', () => {
   let createEventRouterRequest;
@@ -202,7 +201,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.RESOURCE_NOT_FOUND);
+        expect(res.body).to.deep.equal(messages.RESOURCE_NOT_FOUND);
       });
   });
 
@@ -235,7 +234,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_URL);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_URL);
       });
   });
 
@@ -284,7 +283,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(404)
       .then((res) => {
-        expect(res.body).to.deep.equal(eventMessages.NONEXISTENT_DATES);
+        expect(res.body).to.deep.equal(messages.NONEXISTENT_DATES);
       });
   });
 
@@ -298,7 +297,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -312,7 +311,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -327,7 +326,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -342,7 +341,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -357,7 +356,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -372,7 +371,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 
@@ -387,7 +386,7 @@ describe('POST /event/:id/vote', () => {
       .expect('Content-Type', /json/)
       .expect(400)
       .then((res) => {
-        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_BODY);
+        expect(res.body).to.deep.equal(messages.INVALID_REQUEST_BODY);
       });
   });
 });
