@@ -8,4 +8,12 @@ const createEventWithVotesFactory = (eventName, eventDates) =>
       }
     );
 
-module.exports = { createEventWithVotesFactory };
+const createErrorObject = invalidId => ({
+  message: 'Cast to ObjectId failed for value ' + invalidId + ' at path \'_id\'',
+  name: 'CastError',
+  kind: 'ObjectId',
+  value: invalidId,
+  path: '_id'
+});
+
+module.exports = { createEventWithVotesFactory, createErrorObject };

@@ -4,6 +4,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 
 const initRequest = require('../test-helpers').initRequest;
 const createEventRouter = require('../../features/event/event-routes');
+const createErrorObject = require('./utils').createErrorObject;
 const messages = require('../../common/messages');
 
 describe('GET /event/:id', () => {
@@ -113,13 +114,7 @@ describe('GET /event/:id', () => {
 
   it('should respond with a 400 when using invalid id', () => {
     const invalidId = '57fa90d046d78827c7c50f8';
-    const errorObject = {
-      message: 'Cast to ObjectId failed for value ' + invalidId + ' at path \'_id\'',
-      name: 'CastError',
-      kind: 'ObjectId',
-      value: invalidId,
-      path: '_id'
-    };
+    const errorObject = createErrorObject(invalidId);
     // DB stub returns null
     stubForGetOneById.rejects(errorObject);
     return request
@@ -129,13 +124,7 @@ describe('GET /event/:id', () => {
 
   it('should respond with an error message when using invalid id', () => {
     const invalidId = '57fa90d046d78827c7c50f8';
-    const errorObject = {
-      message: 'Cast to ObjectId failed for value ' + invalidId + ' at path \'_id\'',
-      name: 'CastError',
-      kind: 'ObjectId',
-      value: invalidId,
-      path: '_id'
-    };
+    const errorObject = createErrorObject(invalidId);
     // DB stub returns null
     stubForGetOneById.rejects(errorObject);
     return request

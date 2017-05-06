@@ -12,30 +12,29 @@ const createDateMappedEvent = createDateMappedEventFactory(mapDatesWithMoment, c
 
 // Public functions
 
-const getAllEvents = (req, res) => {
+const getAllEvents = (req, res, next) => {
   eventModel.getAll()
     .then((events) => { // eslint-disable-line
       return res.status(200).json({
         events: events.map(event => ({ id: event._id, name: event.name }))
       });
     })
-    .catch(err => sendErrorResponse(err, res));
+    .catch(next);
 };
 
-const getEvent = (req, res) => {
+const getEvent = (req, res, next) => {
   eventModel.getOneById(req.params.id)
     .then((event) => {
       if (event === null) {
-        // Nothing found so empty response
-        return res.status(404).json(commonMessages.RESOURCE_NOT_FOUND);
+        throw Error(errors.RESOURCE_NOT_FOUND_ERROR);
       }
         // Only relevant data to the response
       return res.status(200).json(createDateMappedEvent(event._id, event.name, event.dates, event.votes));
     })
-    .catch(err => sendErrorResponse(err, res));
+    .catch(next);
 };
 
-const createEvent = (req, res) => {
+const createEvent = (req, res, next) => {
   const newEvent = {
     name: req.body.name,
     dates: req.body.dates.map(date => moment(date))
@@ -44,7 +43,7 @@ const createEvent = (req, res) => {
     .then((event) => {
       res.status(201).json({ id: event._id });
     })
-    .catch(err => sendErrorResponse(err, res));
+    .catch(next);
 };
 
 const castVote = (req, res, next) => {

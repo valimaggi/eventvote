@@ -6,6 +6,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 const initRequest = require('../test-helpers').initRequest;
 const createEventWithVotesFactory = require('./utils').createEventWithVotesFactory;
 const createEventRouter = require('../../features/event/event-routes');
+const createErrorObject = require('./utils').createErrorObject;
 const errors = require('../../features/event/event-error-handlers').errors;
 const commonMessages = require('../../common/messages');
 const eventMessages = require('../../features/event/messages');
@@ -180,9 +181,7 @@ describe('POST /event/:id/vote', () => {
     const testVoterName = 'Mikko';
     const testVoteDate = '2014-01-01';
 
-    // DB stub returns an event
     stubForGetOneById.resolves(null);
-    stubForUpdate.resolves(errors.RESOURCE_NOT_FOUND_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')
@@ -195,9 +194,7 @@ describe('POST /event/:id/vote', () => {
     const testVoterName = 'Mikko';
     const testVoteDate = '2014-01-01';
 
-    // DB stub returns an event
     stubForGetOneById.resolves(null);
-    stubForUpdate.resolves(errors.RESOURCE_NOT_FOUND_ERROR);
 
     return request
       .post('/' + testEventId + '/vote')
@@ -206,6 +203,24 @@ describe('POST /event/:id/vote', () => {
       .expect(404)
       .then((res) => {
         expect(res.body).to.deep.equal(commonMessages.RESOURCE_NOT_FOUND);
+      });
+  });
+
+  it('should respond with a 400 when voting with invalid event id', () => {
+    const invalidEventId = '57fa90d046d78827c7c50f8';
+    const testVoterName = 'Mikko';
+    const testVoteDate = '2014-01-01';
+    const errorObject = createErrorObject(invalidEventId);
+
+    stubForGetOneById.rejects(errorObject);
+
+    return request
+      .post('/' + invalidEventId + '/vote')
+      .send({ name: testVoterName, votes: [testVoteDate] })
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).to.deep.equal(commonMessages.INVALID_REQUEST_URL);
       });
   });
 
