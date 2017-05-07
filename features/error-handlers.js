@@ -1,8 +1,7 @@
 const { RESOURCE_NOT_FOUND } = require('../common/messages');
+const { serverErrorHandler } = require('../common/middleware');
 
 const RESOURCE_NOT_FOUND_ERROR = 'RESOURCE_NOT_FOUND_ERROR';
-
-const serverErrorHandler = (err, req, res, next) => res.sendStatus(500); // eslint-disable-line
 
 const resourceNotFound = (err, req, res, next) => {
   if (err.message && err.message === RESOURCE_NOT_FOUND_ERROR) {
@@ -11,6 +10,6 @@ const resourceNotFound = (err, req, res, next) => {
   return next(err);
 };
 
-const composeErrorHandlers = (...customErrorHandlers) => [...customErrorHandlers, serverErrorHandler]; // eslint-disable-line
+const composeErrorHandlers = (...customErrorHandlers) => [...customErrorHandlers, serverErrorHandler];
 
 module.exports = { composeErrorHandlers, resourceNotFound, errors: { RESOURCE_NOT_FOUND_ERROR } };
