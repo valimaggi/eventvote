@@ -3,7 +3,7 @@ const Joi = require('joi');
 const create = {
   body: Joi.object().keys({
     name: Joi.string().required(),
-    dates: Joi.array().items(Joi.date()).required()
+    dates: Joi.array().min(1).items(Joi.date()).required()
   })
 };
 
