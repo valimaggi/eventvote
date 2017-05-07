@@ -1,3 +1,4 @@
+const { isInvalidDBIdError } = require('../../config/database');
 const { INVALID_REQUEST_BODY, INVALID_REQUEST_URL, NONEXISTENT_DATES } = require('./messages');
 const errors = require('../error-handlers').errors;
 
@@ -11,7 +12,7 @@ const validation = (err, req, res, next) => {
 };
 
 const invalidId = (err, req, res, next) => {
-  if (Object.prototype.hasOwnProperty.call(err, 'name') && err.name === 'CastError' && Object.prototype.hasOwnProperty.call(err, 'path') && err.path === '_id') {
+  if (isInvalidDBIdError(err)) {
     return res.status(400).json(INVALID_REQUEST_URL);
   }
   return next(err);

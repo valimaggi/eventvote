@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
+const { initModel } = require('../../config/database');
 
-const Schema = mongoose.Schema;
-
-const EventSchema = new Schema({
+const EventSchema = {
   id: String,
   name: String,
   dates: [Date],
@@ -11,12 +9,13 @@ const EventSchema = new Schema({
     date: Date,
     people: [String]
   }],
-});
+};
 
-const getAll = () => mongoose.model('Event', EventSchema).find({});
-const getOneById = id => mongoose.model('Event', EventSchema).findOne({ _id: id });
-const create = newEvent => mongoose.model('Event', EventSchema).create(newEvent);
-const update = event => event.save();
-const deleteAll = () => mongoose.model('Event', EventSchema).remove({});
+const model = initModel('Event', EventSchema);
+const getAll = () => model.findAll();
+const getOneById = id => model.findOne(id);
+const create = newEvent => model.create(newEvent);
+const update = event => model.save(event);
+const deleteAll = () => model.removeAll();
 
 module.exports = { getAll, getOneById, create, update, deleteAll };
