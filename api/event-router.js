@@ -1,8 +1,8 @@
 const express = require('express');
 const Celebrate = require('celebrate');
-const { create, castVote } = require('./event-schemas');
-const { composeErrorHandlers, resourceNotFound } = require('../error-handlers');
-const { vote, invalidId, validation } = require('./event-error-handlers');
+const { create, castVote } = require('../features/event/event-schemas');
+const { composeErrorHandlers, resourceNotFound } = require('../features/error-handlers');
+const { vote, invalidId, validation } = require('../features/event/event-error-handlers');
 
 const createEventRouter = (feature) => {
   const router = new express.Router();

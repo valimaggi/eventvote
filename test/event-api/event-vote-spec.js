@@ -5,7 +5,7 @@ require('sinon-as-promised'); // This needs to be called once to enable promise 
 
 const { initRequest } = require('../test-helpers');
 const { createEventWithVotesFactory } = require('./utils');
-const createEventRouter = require('../../features/event/event-routes');
+const createEventRouter = require('../../api/event-router');
 const { createInvalidIdErrorObject } = require('./utils');
 const { NONEXISTENT_DATES_ERROR } = require('../../features/event/event-error-handlers').errors;
 const { RESOURCE_NOT_FOUND, INVALID_REQUEST_URL, NONEXISTENT_DATES, INVALID_REQUEST_BODY } = require('../../features/event/messages');

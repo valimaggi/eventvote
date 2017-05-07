@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 require('sinon-as-promised'); // This needs to be called once to enable promise stubbing
 
 const { initRequest } = require('../test-helpers');
-const createEventRouter = require('../../features/event/event-routes');
+const createEventRouter = require('../../api/event-router');
 const { createInvalidIdErrorObject } = require('./utils');
 const { RESOURCE_NOT_FOUND, INVALID_REQUEST_URL } = require('../../common/messages');
 

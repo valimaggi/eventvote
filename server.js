@@ -7,7 +7,7 @@ const database = require('./config/database');
 const { applyMiddleware, invalidJSONErrorHandler, serverErrorHandler } = require('./common/middleware');
 const helmetFunctions = require('./config/security');
 const { API_PREFIX } = require('./config/properties');
-const createRootRouter = require('./root-router');
+const createRootRouter = require('./api/root-router');
 
 const app = applyMiddleware(
   morgan('dev'), // API logging
