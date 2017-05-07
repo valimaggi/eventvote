@@ -3,7 +3,7 @@
 App for event scheduling with voting. So far there is only the backend REST API.
 
 #### What's next/missing? (in no order)
-* Better data validation for the request body objects (at least for dates)
+* Better data validation for the request body objects (for example dates)
 * Data validation (schemas) for the response body objects
 * More comprehensive API tests
 * Validation for app-specific environment variables
@@ -19,6 +19,8 @@ Guideline is "by feature" so there are no folders for routes, models etc. separa
 ## Install
 
 `yarn install` or `npm install`
+
+Prefer yarn as there are no shrinkwrap used in this project (yarn provides yarn.lock).
 
 ## Start
 
