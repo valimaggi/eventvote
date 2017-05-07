@@ -3,16 +3,18 @@
 App for event scheduling with voting. So far there is only the backend REST API.
 
 #### What's next/missing? (in no order)
+* Better data validation for the request body objects (at least for dates)
 * Data validation (schemas) for the response body objects
 * More comprehensive API tests
-* SQL database support in addition to MongoDB
+* Validation for app-specific environment variables
+* Support for another ODM than Mongoose, one which does not use promises
 * Frontend
-* Authentication
+* Authentication (JWT)
 * Deploy to Heroku or whatever
 
 #### Project structure
 
-Guideline is "by feature" so there are no folders for routes, models etc. separately. All these modules are under each feature. In the current scope, it's pretty useless, because there's only one feature, but this is also intended to be a base project structure for me.
+Guideline is "by feature" so there are no folders for routes, models etc. separately. All these modules are under each feature. In the current scope, it's pretty useless, because there's only one feature, but this is also intended to be a base project structure for larger projects for me.
 
 ## Install
 
