@@ -36,7 +36,13 @@ Prefer yarn as there are no shrinkwrap used in this project (yarn provides yarn.
 
 ### General
 
-Use the .env file to set the config props like server port and your MongoDB URI and credentials.
+Use the .env file to set the custom environment variables. All of these all required:
+
+`DB_ODM` Object Document Mapper for MongoDB to be used, for now only 'mongoose' is supported
+`DB_URI`
+`DB_USER`
+`DB_PASS`
+`SERVER_PORT`
 
 ### API
 
